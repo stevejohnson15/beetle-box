@@ -11,6 +11,14 @@ dist/
 venv/
 .env
 
+# Secrets / credentials -- NEVER commit API keys
+anthropic.key
+*.key
+*.pem
+secrets/
+.env.*
+!.env.example
+
 # uv
 uv.lock
 
