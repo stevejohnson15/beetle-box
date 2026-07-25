@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# Root Hydra config for E3 (the beetle-box). Sweep the box condition and game:
+#   python experiments/e3_beetle_box/run.py -m box=shared,divergent,empty,noise
+#   python experiments/e3_beetle_box/run.py experiment=sensation_matching
+#   python experiments/e3_beetle_box/run.py mode=rich box=shared   # frontier, costs $
+
+defaults:
+  - experiment: private_referent
+  - box: shared
+  - channel: small
+  - env: flat8
+  - agent: default
+  - _self_
+
+seed: 0
+device: cpu
+output_dir: results
+
+# "clean" = from-scratch neural agents; "rich" = frontier API agents (in-context).
+mode: clean
+
+# Rich-mode (frontier) settings — only used when mode=rich. Small by default: a
+# rich run makes ~2 * num_rounds API calls. Model override for cost:
+# claude-haiku-4-5 / claude-sonnet-5.
+rich:
+  model: claude-opus-4-8
+  num_referents: 4
+  vocab_size: 6
+  num_rounds: 12
+
+hydra:
+  job:
+    chdir: false

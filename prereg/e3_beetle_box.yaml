@@ -1,0 +1,54 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# FROZEN pre-registration for E3 (the beetle-box, Philosophical Investigations §293).
+# Hypotheses, conditions, and thresholds fixed BEFORE running (plan §3.2, §3.3).
+# Analysis imports only these criteria. Do not tune to a result.
+
+experiment: e3_beetle_box
+frozen: true
+version: 1
+date: 2026-07-25
+
+target: >
+  §293 directly. A population coordinates on "inner states" through public words
+  while we control the boxes. The question is whether — and how much — the private
+  contents of the box do any work in the public language-game.
+
+games:  # all three are supported (a framework for exploration); see docs/e3_design.md
+  - private_referent:   the sender's only access to the referent is its box; a
+      box-aware receiver identifies it. The centerpiece.
+  - sensation_matching: two agents privately sense a type, exchange public words,
+      and jointly judge same/different.
+  - public_referent_aux: referent public to the sender, box an auxiliary channel
+      (weakest wiring; included for contrast).
+
+conditions: [shared, divergent, empty, noise]
+
+hypotheses:
+  H_earnable: >
+    The cancellation must be EARNABLE (§3.3). Where the box is the only route to
+    the answer (private_referent, sensation_matching), informative boxes
+    (shared/divergent) must beat empty/noise by >= earnable_margin. Otherwise the
+    box is architecturally idle and any "it cancels out" is rigged, not found.
+  H_drops_out: >
+    If shared and divergent coordinate about equally (|acc(shared) - acc(divergent)|
+    <= drop_gap_tolerance), the private FORM of the inner state is idle — a working
+    model of "the beetle drops out."
+  H_shared_helps: >
+    If a shared inner state coordinates measurably better than divergent
+    (acc(shared) - acc(divergent) > drop_gap_tolerance), that is a result against
+    the strong deflationary reading — the shared box does work.
+
+thresholds:
+  chance_margin: 0.10          # "above chance" means acc >= chance + this
+  earnable_margin: 0.25        # informative-mean minus empty, for box-only games
+  drop_gap_tolerance: 0.10     # |shared - divergent| below this = beetle drops out
+
+licenses: |
+  Makes the core claim of §293 a number. If empty/divergent-box agents coordinate
+  as fluently as shared-box agents, this is a working model of the beetle dropping
+  out; if a shared inner state measurably improves coordination, that counts
+  against the strong deflationary reading. Either way it does NOT settle whether
+  the agents "have" inner states, nor what those states are like. The four
+  conditions are our God's-eye control; the agents never get one. (plan §4.3)

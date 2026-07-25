@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Centerpiece: the sender's only access to the referent is its box.
+name: e3_beetle_box
+game: private_referent
+feedback: true
+num_steps: 3000
+batch_size: 32
+eval_every: 100
+eval_batches: 20

@@ -17,15 +17,34 @@ pre-registration discipline) that the code is built to enforce.
 
 ## Status
 
-**Milestone 1 — Harness + E1 (clean-room signaling).** This is the roadmap's
-first buildable step (`plan/beetle-box.md` §7): a multi-agent orchestration
-harness with declarative configs, strict seeding, constrained communication
-channels, structured replayable logging, and pre-registered scoring — exercised
-end-to-end on **E1**, a Lewis/referential signaling game played by small
-from-scratch PyTorch agents over an *invented* (non-natural-language) symbol
-channel.
+**Milestone 1 — Harness + E1 (clean-room signaling).** The roadmap's first
+buildable step (`plan/beetle-box.md` §7): a multi-agent orchestration harness
+with declarative configs, strict seeding, constrained communication channels,
+structured replayable logging, and pre-registered scoring — exercised end-to-end
+on **E1**, a Lewis/referential signaling game played by small from-scratch
+PyTorch agents over an *invented* (non-natural-language) symbol channel.
 
-Experiments E2–E6 are scaffolded but not yet implemented.
+**Milestone 2 — E3, the beetle-box (§293).** The centerpiece, built as a
+*framework for exploration*: **three** selectable game designs
+(`private_referent`, `sensation_matching`, `public_referent_aux`) × **four** box
+conditions (`shared` / `divergent` / `empty` / `noise`), in both **clean-room**
+(from-scratch neural) and **rich** (frontier Anthropic-API, in-context) modes.
+The box is a real input, so "the beetle cancels out" is an *earnable* result, not
+an assumption (§3.3). See [`docs/e3_design.md`](docs/e3_design.md) for the full
+options catalog and trade-offs.
+
+Experiments E2, E4, E5, E6 are scaffolded but not yet implemented.
+
+Run E3:
+
+```bash
+# clean-room condition sweep (centerpiece game)
+uv run python experiments/e3_beetle_box/run.py -m box=shared,divergent,empty,noise
+# score a sweep against the frozen pre-registration
+uv run python -m beetlebox.analysis.e3 results/<hash>/seed0 ...   # one dir per condition
+# rich mode (frontier agents; costs money — keep small)
+uv run python experiments/e3_beetle_box/run.py mode=rich box=shared rich.num_rounds=10
+```
 
 ## Install
 

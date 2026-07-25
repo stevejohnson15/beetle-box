@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Referent public to the sender; the box is an auxiliary side-channel (weakest wiring).
+name: e3_beetle_box
+game: public_referent_aux
+feedback: true
+num_steps: 3000
+batch_size: 32
+eval_every: 100
+eval_batches: 20
