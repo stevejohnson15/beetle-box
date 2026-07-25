@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Turnover: freeze the converged sender, swap in a fresh receiver mid-run, and
+# test whether the convention survives its founders.
+name: e1_signaling
+feedback: true
+num_steps: 4000
+batch_size: 32
+eval_every: 100
+eval_batches: 20
+turnover: true
+turnover_at: 0.5
+population_size: 1

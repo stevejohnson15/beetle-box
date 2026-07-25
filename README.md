@@ -1,0 +1,84 @@
+# Beetle-Box
+
+*An experimental program using LLM agents and small from-scratch models to
+**operationalize** — not to prove or refute — Ludwig Wittgenstein's arguments
+about private language, meaning-as-use, rule-following, and forms of life.*
+
+> The single most important commitment: **this project does not aim to prove or
+> disprove Wittgenstein.** His claims are grammatical, not empirical. The aim is
+> to turn his thought experiments into manipulable instruments — intuition pumps
+> we can crank — where surprising agent behavior becomes an occasion for
+> philosophical work, never a verdict.
+
+The full research-design document lives in [`plan/beetle-box.md`](plan/beetle-box.md).
+Read Sections 1–3 there before contributing: they contain the honesty
+commitments (grammatical-not-empirical framing, the pretraining confound,
+pre-registration discipline) that the code is built to enforce.
+
+## Status
+
+**Milestone 1 — Harness + E1 (clean-room signaling).** This is the roadmap's
+first buildable step (`plan/beetle-box.md` §7): a multi-agent orchestration
+harness with declarative configs, strict seeding, constrained communication
+channels, structured replayable logging, and pre-registered scoring — exercised
+end-to-end on **E1**, a Lewis/referential signaling game played by small
+from-scratch PyTorch agents over an *invented* (non-natural-language) symbol
+channel.
+
+Experiments E2–E6 are scaffolded but not yet implemented.
+
+## Install
+
+Requires [`uv`](https://docs.astral.sh/uv/) and Python ≥ 3.11.
+
+```bash
+uv sync --extra dev
+```
+
+## Run E1
+
+```bash
+# Run the signaling game (writes results/<config_hash>/seed<seed>/)
+uv run python experiments/e1_signaling/run.py seed=0
+
+# Score a run against the FROZEN pre-registration
+uv run python -m beetlebox.analysis.e1 results/<config_hash>/seed0
+```
+
+Manipulations (feedback on/off, channel bandwidth `V`/`L`, population size,
+agent turnover) are Hydra config overrides and support `--multirun` sweeps.
+
+## Repository layout
+
+```
+configs/            declarative experiment + condition configs (Hydra)
+prereg/             pre-registered hypotheses & scoring thresholds (frozen, versioned)
+src/beetlebox/
+  config.py         dataclass config schema + stable config_hash (Hydra-independent)
+  seeding.py        deterministic global/per-run seeding
+  harness/          multi-agent turn loop + run manager        [extraction candidate]
+  agents/           Agent ABC; from-scratch neural sender/receiver
+  memory/           toggleable per-agent memory (interface; used fully in E2)
+  channels/         invented-vocabulary communication channels  [extraction candidate]
+  envs/             signaling-game environment + referent generators
+  runlog/           structured, replayable JSONL run logs        [extraction candidate]
+  analysis/         scoring; imports only frozen prereg criteria [extraction candidate]
+  mech/             mechanistic sub-stack placeholder (E4)
+experiments/        one directory per experiment (E1 implemented)
+results/            run outputs, keyed by config hash + seed (gitignored)
+```
+
+## License & attribution
+
+Beetle-Box is licensed under the **Apache License 2.0** — see [`LICENSE`](LICENSE)
+and [`NOTICE`](NOTICE). It permits full reuse and requires only proper
+attribution.
+
+Several components (the orchestration harness, the emergent-communication
+channel toolkit, the pre-registration/scoring framework, and the reproducible
+run-logging layer) are written behind clean module boundaries so they can later
+be extracted as **standalone open-source libraries**. Any such spun-out library
+remains Apache-2.0 and attributes Beetle-Box as its origin.
+
+Every source file carries an `SPDX-License-Identifier: Apache-2.0` header; please
+keep these headers on new files. See [`CONTRIBUTING.md`](CONTRIBUTING.md).

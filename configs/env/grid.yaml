@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Structured attribute x value referents (2 attributes x 4 values = 16 referents).
+# Pair with channel=wide (L>1) to make topographic-similarity analysis meaningful.
+mode: grid
+num_referents: 8
+num_attributes: 2
+num_values: 4

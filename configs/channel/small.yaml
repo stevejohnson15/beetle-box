@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Single-symbol channel; bandwidth V^L = 8.
+vocab_size: 8
+message_length: 1

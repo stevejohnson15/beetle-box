@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Eight unstructured one-hot referents (chance = 1/8).
+mode: flat
+num_referents: 8
+num_attributes: 2
+num_values: 4

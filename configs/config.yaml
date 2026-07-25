@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# Root Hydra config for E1. Compose conditions by overriding groups, e.g.:
+#   python experiments/e1_signaling/run.py experiment=e1_ablation
+#   python experiments/e1_signaling/run.py env=grid channel=wide
+#   python experiments/e1_signaling/run.py -m seed=0,1,2 experiment=e1_default,e1_ablation
+
+defaults:
+  - experiment: e1_default
+  - channel: small
+  - env: flat8
+  - agent: default
+  - _self_
+
+seed: 0
+device: cpu
+output_dir: results
+
+# Keep the process CWD stable so `output_dir` resolves against where the user
+# launched the run (results are keyed by config hash + seed, not by Hydra's dir).
+hydra:
+  job:
+    chdir: false

@@ -1,0 +1,54 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+
+[project]
+name = "beetlebox"
+version = "0.1.0"
+description = "Operationalizing Wittgenstein's private-language and rule-following arguments with LLM agents and small from-scratch models."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Beetle-Box contributors" }]
+keywords = [
+    "wittgenstein",
+    "emergent-communication",
+    "multi-agent",
+    "philosophy-of-language",
+    "interpretability",
+]
+
+dependencies = [
+    "torch>=2.2",
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "hydra-core>=1.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+
+[project.scripts]
+beetlebox = "beetlebox.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/beetlebox"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "experiments", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

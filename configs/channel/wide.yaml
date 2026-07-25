@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Multi-symbol channel (bandwidth V^L = 36); L>1 enables compositional structure.
+vocab_size: 6
+message_length: 2

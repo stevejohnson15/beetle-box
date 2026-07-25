@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Environments
+.venv/
+venv/
+.env
+
+# uv
+uv.lock
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Hydra / experiment outputs
+outputs/
+multirun/
+
+# Run results (keyed by config hash + seed); keep the directory, not its contents
+results/*
+!results/.gitkeep
+
+# Notebooks scratch
+notebooks/*
+!notebooks/.gitkeep
+
+# OS
+.DS_Store

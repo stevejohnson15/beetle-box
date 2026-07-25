@@ -1,0 +1,60 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# FROZEN pre-registration for E1 (convention from use; Lewis signaling game).
+# Per plan/beetle-box.md §3.2, hypotheses, conditions, and scoring thresholds are
+# fixed here BEFORE running and kept under version control. Analysis imports only
+# these criteria. Do not tune these to a result; add a new, dated prereg instead.
+
+experiment: e1_signaling
+frozen: true
+version: 1
+date: 2026-07-25
+
+target: >
+  Meaning-as-use in its thinnest form. A sender and receiver, given no meanings
+  in advance and communicating over an invented (non-natural-language) symbol
+  channel, should develop a shared, stable convention from feedback-driven use
+  alone. This establishes the baseline later experiments perturb.
+
+conditions:
+  - clean_room_feedback: from-scratch neural agents, invented channel, success
+      signal delivered (feedback=true). Convention expected to emerge.
+  - clean_room_ablation: identical, but no success/correction signal
+      (feedback=false); no learning occurs, coordination expected to stay near
+      chance. Guards against a leak (rather than the game) driving coordination.
+  - turnover: a converged sender is frozen and a fresh receiver introduced;
+      tests whether the convention survives its founders.
+  - grid_compositional: structured (attribute x value) referents with L>1 to make
+      topographic-similarity analysis of compositional structure meaningful.
+
+hypotheses:
+  H1: >
+    With feedback, greedy communication accuracy rises well above chance
+    (>= emergence_accuracy and >= emergence_ratio_over_chance x chance).
+  H2: >
+    Without feedback, accuracy stays near chance (<= ablation_max_accuracy).
+  H3: >
+    The emergent referent->message convention stabilizes over the final evals
+    (convention_stability >= stability_min).
+  H4: >
+    After turnover, a fresh receiver re-adopts the incumbent sender's convention
+    (post-turnover accuracy >= turnover_fidelity_min).
+  H5: >
+    In the grid_compositional condition, message distance correlates with
+    referent distance (topographic-similarity rho >= topsim_min_rho).
+
+thresholds:
+  emergence_accuracy: 0.90
+  emergence_ratio_over_chance: 3.0
+  ablation_max_accuracy: 0.30
+  stability_min: 0.90
+  stability_window: 5
+  turnover_fidelity_min: 0.85
+  topsim_min_rho: 0.30
+
+licenses: |
+  Demonstrates the thin meaning-as-use thesis and establishes the baseline that
+  later experiments perturb. It does NOT, by itself, say anything about
+  "understanding," inner states, or whether the agents share a form of life. A
+  stable convention here is public practice, nothing more. (plan/beetle-box.md §4.1)
