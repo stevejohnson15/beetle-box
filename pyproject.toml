@@ -31,6 +31,14 @@ dev = [
     "pytest>=8.0",
     "ruff>=0.6",
 ]
+# Tooling for the demonstration notebooks (see docs/README.md).
+notebooks = [
+    "jupyter>=1.0",
+    "nbformat>=5.9",
+    "nbconvert>=7.0",
+    "ipykernel>=6.0",
+    "matplotlib>=3.8",
+]
 
 [project.scripts]
 beetlebox = "beetlebox.cli:main"
@@ -46,6 +54,9 @@ packages = ["src/beetlebox"]
 line-length = 100
 target-version = "py311"
 src = ["src", "experiments", "tests"]
+# Notebooks follow their own idioms (trailing `;` to suppress output, compact
+# cells); they are verified by executing them, not by linting.
+extend-exclude = ["notebooks", "results"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W", "UP", "B"]

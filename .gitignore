@@ -31,13 +31,16 @@ uv.lock
 outputs/
 multirun/
 
-# Run results (keyed by config hash + seed); keep the directory, not its contents
+# Run results (keyed by config hash + seed); transient runs are ignored, but the
+# curated exemplary-run write-ups (results/exemplary/) are committed.
 results/*
 !results/.gitkeep
+!results/exemplary
 
-# Notebooks scratch
+# Notebooks: committed demonstration notebooks are tracked; scratch is ignored.
 notebooks/*
 !notebooks/.gitkeep
+!notebooks/*.ipynb
 
 # OS
 .DS_Store
