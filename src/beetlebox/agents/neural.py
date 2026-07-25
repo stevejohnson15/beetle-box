@@ -92,3 +92,84 @@ class NeuralReceiver(nn.Module, Agent):
         for module in self.net:
             if isinstance(module, nn.Linear):
                 module.reset_parameters()
+
+
+class BoxReceiver(nn.Module, Agent):
+    """Message + private box -> referent classifier (E3 private-referent game).
+
+    The receiver's own box is a real input, so a *shared* inner state can help
+    it decode where a *divergent* one cannot -- that difference is the measured
+    beetle-box result.
+    """
+
+    def __init__(self, vocab_size: int, message_length: int, num_classes: int,
+                 box_dim: int, embed_dim: int = 32, hidden_dim: int = 64, *,
+                 name: str = "box_receiver", memory: Memory | None = None) -> None:
+        nn.Module.__init__(self)
+        Agent.__init__(self, name=name, memory=memory)
+        self.embedding = nn.Embedding(vocab_size, embed_dim)
+        self.net = nn.Sequential(
+            nn.Linear(message_length * embed_dim + box_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, num_classes),
+        )
+
+    def forward(self, message: torch.Tensor, box: torch.Tensor) -> torch.Tensor:
+        emb = self.embedding(message).reshape(message.shape[0], -1)
+        return self.net(torch.cat([emb, box], dim=-1))
+
+    def predict(self, message: torch.Tensor, box: torch.Tensor) -> torch.Tensor:
+        return self.forward(message, box).argmax(dim=-1)
+
+    def reset_parameters(self) -> None:
+        self.embedding.reset_parameters()
+        for module in self.net:
+            if isinstance(module, nn.Linear):
+                module.reset_parameters()
+
+
+class MatchingAgent(nn.Module, Agent):
+    """Symmetric agent for the sensation same/different game (E3).
+
+    A ``speak`` head turns the agent's private sensation (box) into a public
+    symbol; a ``judge`` head decides, from the agent's own box plus the partner's
+    public symbol, whether the two sensations are the same TYPE.
+    """
+
+    def __init__(self, vocab_size: int, message_length: int, box_dim: int,
+                 embed_dim: int = 32, hidden_dim: int = 64, *, name: str = "matcher",
+                 memory: Memory | None = None) -> None:
+        nn.Module.__init__(self)
+        Agent.__init__(self, name=name, memory=memory)
+        self.vocab_size = vocab_size
+        self.message_length = message_length
+        self.speaker = nn.Sequential(
+            nn.Linear(box_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, message_length * vocab_size),
+        )
+        self.embedding = nn.Embedding(vocab_size, embed_dim)
+        self.judge_net = nn.Sequential(
+            nn.Linear(box_dim + message_length * embed_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, 2),  # same / different
+        )
+
+    def speak(self, box: torch.Tensor, *, greedy: bool = False):
+        logits = self.speaker(box).view(-1, self.message_length, self.vocab_size)
+        dist = Categorical(logits=logits)
+        message = logits.argmax(dim=-1) if greedy else dist.sample()
+        logprob = dist.log_prob(message).sum(dim=-1)
+        entropy = dist.entropy().sum(dim=-1)
+        return message, logprob, entropy
+
+    def judge(self, box: torch.Tensor, partner_message: torch.Tensor) -> torch.Tensor:
+        emb = self.embedding(partner_message).reshape(partner_message.shape[0], -1)
+        return self.judge_net(torch.cat([box, emb], dim=-1))
+
+    def reset_parameters(self) -> None:
+        for net in (self.speaker, self.judge_net):
+            for module in net:
+                if isinstance(module, nn.Linear):
+                    module.reset_parameters()
+        self.embedding.reset_parameters()

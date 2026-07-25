@@ -8,6 +8,17 @@ PyTorch; import :mod:`beetlebox.agents.base` directly to avoid that.
 """
 
 from beetlebox.agents.base import Agent
-from beetlebox.agents.neural import NeuralReceiver, NeuralSender
+from beetlebox.agents.neural import (
+    BoxReceiver,
+    MatchingAgent,
+    NeuralReceiver,
+    NeuralSender,
+)
 
-__all__ = ["Agent", "NeuralSender", "NeuralReceiver"]
+__all__ = [
+    "Agent",
+    "NeuralSender",
+    "NeuralReceiver",
+    "BoxReceiver",
+    "MatchingAgent",
+]

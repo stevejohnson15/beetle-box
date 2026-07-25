@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Two agents privately sense a type, exchange public words, judge same/different.
+name: e3_beetle_box
+game: sensation_matching
+feedback: true
+num_steps: 3000
+batch_size: 32
+eval_every: 100
+eval_batches: 20

@@ -105,6 +105,46 @@ class RunConfig:
 
 
 # --------------------------------------------------------------------------- #
+# E3 (beetle-box) configuration
+# --------------------------------------------------------------------------- #
+@dataclass
+class BoxConfig:
+    """The private "box" each agent carries (see :mod:`beetlebox.boxes`)."""
+
+    condition: str = "shared"  # shared | divergent | empty | noise
+    box_dim: int = 16
+
+
+@dataclass
+class E3ExperimentConfig:
+    """The E3 protocol: which sensation-language-game, and the training regime."""
+
+    name: str = "e3_beetle_box"
+    # Which of the three operationalizations to run (all are supported; this is a
+    # framework for exploration, so the game is a first-class config axis).
+    game: str = "private_referent"  # private_referent | sensation_matching | public_referent_aux
+    feedback: bool = True
+    num_steps: int = 3000
+    batch_size: int = 32
+    eval_every: int = 100
+    eval_batches: int = 20
+
+
+@dataclass
+class E3RunConfig:
+    """Top-level E3 run configuration."""
+
+    seed: int = 0
+    device: str = "cpu"
+    output_dir: str = "results"
+    experiment: E3ExperimentConfig = field(default_factory=E3ExperimentConfig)
+    box: BoxConfig = field(default_factory=BoxConfig)
+    channel: ChannelConfig = field(default_factory=ChannelConfig)
+    env: EnvConfig = field(default_factory=EnvConfig)
+    agent: AgentConfig = field(default_factory=AgentConfig)
+
+
+# --------------------------------------------------------------------------- #
 # (de)serialization + hashing
 # --------------------------------------------------------------------------- #
 def to_dict(cfg: Any) -> dict[str, Any]:
@@ -144,6 +184,32 @@ def from_dict(data: dict[str, Any]) -> RunConfig:
         return cls(**kwargs)
 
     return _build(RunConfig, dict(data))
+
+
+def from_dict_e3(data: dict[str, Any]) -> E3RunConfig:
+    """Build an :class:`E3RunConfig` from a plain dict (e.g. a Hydra DictConfig)."""
+    sub = {
+        "experiment": E3ExperimentConfig,
+        "box": BoxConfig,
+        "channel": ChannelConfig,
+        "env": EnvConfig,
+        "agent": AgentConfig,
+    }
+
+    def _build(cls, values: dict[str, Any] | None):
+        values = values or {}
+        kwargs = {}
+        for f in dataclasses.fields(cls):
+            if f.name not in values:
+                continue
+            v = values[f.name]
+            if f.name in sub:
+                kwargs[f.name] = _build(sub[f.name], dict(v))
+            else:
+                kwargs[f.name] = v
+        return cls(**kwargs)
+
+    return _build(E3RunConfig, dict(data))
 
 
 def canonical_json(cfg: Any) -> str:
