@@ -140,6 +140,28 @@ For a live, narrated walkthrough see the [notebook](../notebooks/e1_signaling.ip
 for a fully described representative run see the
 [exemplary run](../results/exemplary/e1_signaling/).
 
+### Watching the exchange (transcripts)
+
+To see the communication itself — what the sender says for each referent, what the
+receiver guesses back, and how the shared convention forms — use
+`beetlebox.analysis.transcript`. It renders two views:
+
+- **Convention snapshots** over training: a per-referent table (sender message →
+  receiver guess → correct/collision) at each checkpoint. Early snapshots show
+  referents *colliding* on the same symbol; later ones show the collisions
+  resolved into a clean mapping. Reconstructable from a run's `events.jsonl` alone
+  (the harness logs the receiver's per-referent guesses):
+
+  ```bash
+  uv run python -m beetlebox.analysis.transcript results/<config_hash>/seed<seed>
+  # or a subset of checkpoints:
+  uv run python -m beetlebox.analysis.transcript results/<config_hash>/seed0 --steps 100 300 800
+  ```
+
+- **Individual trials** (the raw "chatter"): `RunManager.sample_exchanges(n)`
+  returns single sender→receiver trials, including the sender's stochastic
+  exploration before the policy sharpens. Demonstrated in the notebook (§5).
+
 ## 7. References
 
 - David Lewis, *Convention: A Philosophical Study* (1969) — the signaling game.

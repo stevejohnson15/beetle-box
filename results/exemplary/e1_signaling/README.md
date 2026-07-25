@@ -29,7 +29,8 @@ uv run python -m beetlebox.analysis.e1 results/b6067ef6f269/seed0
 
 Full config and environment are in [`manifest.json`](manifest.json); the complete
 event stream is in [`events.jsonl`](events.jsonl); the scored report is in
-[`report.txt`](report.txt).
+[`report.txt`](report.txt); and the step-by-step exchange transcript is in
+[`transcript.txt`](transcript.txt).
 
 ## What happened
 
@@ -56,6 +57,18 @@ A maximally efficient code: every referent is unambiguously nameable, no symbol 
 wasted or overloaded. The *particular* assignment is arbitrary (a different seed
 yields a different permutation) — which is exactly the point. The meaning is in the
 coordinated use, not in any symbol's intrinsic content.
+
+### The convention forming, step by step
+
+[`transcript.txt`](transcript.txt) shows the actual sender↔receiver exchange at
+several checkpoints. You can watch collisions get resolved into agreement — e.g.
+at step 300, referents 1 and 2 both still say `s4` (the receiver can't tell them
+apart); by step 800 referent 2 has moved to its own symbol and all eight are
+communicated. Regenerate it from the event log with:
+
+```bash
+uv run python -m beetlebox.analysis.transcript results/b6067ef6f269/seed0
+```
 
 ## What it licenses
 

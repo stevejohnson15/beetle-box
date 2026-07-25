@@ -42,5 +42,8 @@ notebooks/*
 !notebooks/.gitkeep
 !notebooks/*.ipynb
 
+# Jupyter checkpoints (can appear anywhere, incl. under results/exemplary/)
+.ipynb_checkpoints/
+
 # OS
 .DS_Store
