@@ -31,7 +31,8 @@ _BOX_ONLY_GAMES = {"private_referent", "sensation_matching"}
 
 def _run_summary(run_dir: str) -> dict[str, Any]:
     manifest = read_manifest(run_dir)
-    end = next((e for e in iter_events(run_dir) if e.get("event") == "run_end"), {})
+    end = next((e for e in iter_events(run_dir)
+                if e.get("event") in ("run_end", "rich_run_end")), {})
     return {
         "condition": end.get("condition") or manifest["config"]["box"]["condition"],
         "game": end.get("game") or manifest["config"]["experiment"]["game"],

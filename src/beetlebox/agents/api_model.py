@@ -36,6 +36,10 @@ class ApiAgent(Agent):
         self.model = model
         self.max_tokens = max_tokens
         self._client = anthropic.Anthropic(api_key=api_key or load_anthropic_key())
+        # Cumulative token usage across this agent's calls (for cost accounting).
+        self.usage = {"input_tokens": 0, "output_tokens": 0,
+                      "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0}
+        self.num_calls = 0
 
     def choose(self, system: str, user: str, choices: Sequence[int]) -> int:
         """Return one integer from ``choices`` (structured-output constrained)."""
@@ -53,6 +57,13 @@ class ApiAgent(Agent):
             messages=[{"role": "user", "content": user}],
             output_config={"format": {"type": "json_schema", "schema": schema}},
         )
+        u = response.usage
+        self.usage["input_tokens"] += u.input_tokens or 0
+        self.usage["output_tokens"] += u.output_tokens or 0
+        self.usage["cache_read_input_tokens"] += getattr(u, "cache_read_input_tokens", 0) or 0
+        self.usage["cache_creation_input_tokens"] += \
+            getattr(u, "cache_creation_input_tokens", 0) or 0
+        self.num_calls += 1
         text = next((b.text for b in response.content if b.type == "text"), "")
         return int(json.loads(text)["choice"])
 

@@ -134,9 +134,11 @@ class RichPrivateReferentRunner:
                                 correct=hit)
 
         accuracy = correct / self.num_rounds
+        usage = {k: self.sender.usage[k] + self.receiver.usage[k] for k in self.sender.usage}
         summary = {
             "game": "private_referent", "mode": "rich", "condition": str(self.condition),
             "final_accuracy": accuracy, "chance": 1.0 / self.k, "num_rounds": self.num_rounds,
+            "api_calls": self.sender.num_calls + self.receiver.num_calls, "usage": usage,
         }
         if self.logger is not None:
             self.logger.log("rich_run_end", **summary)
