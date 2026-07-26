@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Prototype diarist with an unbounded diary.
+policy: prototype
+memory: full
+window: 20
+threshold: 2.0
+quantizer_bins: 4
+quantizer_scale: 3.0
+impression_temp: 1.5

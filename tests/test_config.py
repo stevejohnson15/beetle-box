@@ -74,3 +74,22 @@ def test_e3_from_dict_ignores_unknown_keys():
     cfg = from_dict_e3({"seed": 1, "bogus": 2, "box": {"condition": "empty", "extra": 9}})
     assert cfg.seed == 1
     assert cfg.box.condition == "empty"
+
+
+def test_e2_roundtrip_and_hash():
+    from beetlebox.config import E2RunConfig, from_dict_e2
+    cfg = E2RunConfig(seed=2)
+    cfg.diarist.policy = "prototype"
+    cfg.diarist.memory = "windowed"
+    cfg.percept.noise = 0.9
+    rebuilt = from_dict_e2(to_dict(cfg))
+    assert rebuilt.diarist.memory == "windowed"
+    assert rebuilt.percept.noise == 0.9
+    assert config_hash(rebuilt) == config_hash(cfg)
+
+
+def test_e2_from_dict_ignores_unknown_keys():
+    from beetlebox.config import from_dict_e2
+    cfg = from_dict_e2({"seed": 1, "bogus": 2, "diarist": {"memory": "none", "x": 9}})
+    assert cfg.seed == 1
+    assert cfg.diarist.memory == "none"

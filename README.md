@@ -33,7 +33,22 @@ The box is a real input, so "the beetle cancels out" is an *earnable* result, no
 an assumption (§3.3). See [`docs/e3_design.md`](docs/e3_design.md) for the full
 options catalog and trade-offs.
 
-Experiments E2, E4, E5, E6 are scaffolded but not yet implemented.
+**E2 — the private diarist (§258).** A single agent names a private percept stream
+with self-invented terms under *no external correction*; the **memory toggle** is
+the central manipulation. It makes §258's dilemma a number: a full diary
+manufactures perfect "same again" consistency (≈1.0) that no memory cannot (≈0.0)
+— but the diary only ever checks the agent's own past impressions, so whether that
+is a real check or a longer private impression is exactly what the number cannot
+settle. Clean-room + rich modes. See [`docs/e2_diarist.md`](docs/e2_diarist.md).
+
+Experiments E4, E5, E6 are scaffolded but not yet implemented.
+
+Run E2:
+
+```bash
+uv run python experiments/e2_diarist/run.py -m diarist=full,windowed,none
+uv run python -m beetlebox.analysis.e2 results/<hash>/seed0
+```
 
 Run E3:
 
