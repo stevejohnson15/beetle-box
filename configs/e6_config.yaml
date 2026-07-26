@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# Root Hydra config for E6 (the reflexive layer). RICH mode only -- costs API calls.
+#   python experiments/e6_reflexive/run.py -m intervention=reflect,control
+intervention: reflect      # reflect | control | none
+num_referents: 4
+vocab_size: 6
+rounds_per_block: 6
+model: null                # null -> the frontier default (claude-opus-4-8)
+seed: 0
+output_dir: results
+
+hydra:
+  job:
+    chdir: false

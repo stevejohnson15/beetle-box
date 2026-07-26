@@ -57,15 +57,29 @@ class ApiAgent(Agent):
             messages=[{"role": "user", "content": user}],
             output_config={"format": {"type": "json_schema", "schema": schema}},
         )
-        u = response.usage
+        self._record_usage(response.usage)
+        text = next((b.text for b in response.content if b.type == "text"), "")
+        return int(json.loads(text)["choice"])
+
+    def respond(self, system: str, user: str) -> str:
+        """Return a free-text reply (used for the E6 reflection/control turns)."""
+        response = self._client.messages.create(
+            model=self.model,
+            max_tokens=self.max_tokens,
+            system=system,
+            messages=[{"role": "user", "content": user}],
+        )
+        self._record_usage(response.usage)
+        return next((b.text for b in response.content if b.type == "text"), "")
+
+    def _record_usage(self, u) -> None:
+        """Accumulate token usage and call count from a response's usage object."""
         self.usage["input_tokens"] += u.input_tokens or 0
         self.usage["output_tokens"] += u.output_tokens or 0
         self.usage["cache_read_input_tokens"] += getattr(u, "cache_read_input_tokens", 0) or 0
         self.usage["cache_creation_input_tokens"] += \
             getattr(u, "cache_creation_input_tokens", 0) or 0
         self.num_calls += 1
-        text = next((b.text for b in response.content if b.type == "text"), "")
-        return int(json.loads(text)["choice"])
 
     def reset_parameters(self) -> None:
         """No-op: frontier agents have no trainable state to reinitialize."""

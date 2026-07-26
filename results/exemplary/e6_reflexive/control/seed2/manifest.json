@@ -1,0 +1,16 @@
+{
+  "config": {
+    "intervention": "control",
+    "model": "claude-haiku-4-5",
+    "num_referents": 4,
+    "output_dir": "results",
+    "rounds_per_block": 8,
+    "seed": 2,
+    "vocab_size": 6
+  },
+  "config_hash": "f68c18ab3f71",
+  "created": "2026-07-26T10:11:41-0500",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python": "3.13.5",
+  "seed": 2
+}

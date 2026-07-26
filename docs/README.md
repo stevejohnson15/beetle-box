@@ -50,7 +50,7 @@ literature needed to understand and extend the framework.
 | E3 — the beetle-box (§293) | [`e3_design.md`](e3_design.md) | [`../notebooks/e3_beetle_box.ipynb`](../notebooks/e3_beetle_box.ipynb) | [`../results/exemplary/e3_beetle_box/`](../results/exemplary/e3_beetle_box/) |
 | E4 — quus / rule-following | [`e4_quus.md`](e4_quus.md) | [`../notebooks/e4_quus.ipynb`](../notebooks/e4_quus.ipynb) | [`../results/exemplary/e4_quus/`](../results/exemplary/e4_quus/) |
 | E5 — forms of life / grounding | [`e5_forms_of_life.md`](e5_forms_of_life.md) | [`../notebooks/e5_forms_of_life.ipynb`](../notebooks/e5_forms_of_life.ipynb) | [`../results/exemplary/e5_forms_of_life/`](../results/exemplary/e5_forms_of_life/) |
-| E6 | *(pending)* | *(pending)* | *(pending)* |
+| E6 — the reflexive layer | [`e6_reflexive.md`](e6_reflexive.md) | [`../notebooks/e6_reflexive.ipynb`](../notebooks/e6_reflexive.ipynb) | [`../results/exemplary/e6_reflexive/`](../results/exemplary/e6_reflexive/) |
 
 ## Running the notebooks
 

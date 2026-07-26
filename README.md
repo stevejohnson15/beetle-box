@@ -17,6 +17,12 @@ pre-registration discipline) that the code is built to enforce.
 
 ## Status
 
+**All six experiments (E1–E6) are implemented** — each with harness code,
+clean-room and/or rich (frontier) modes, a frozen pre-registration, an approach
+doc, a working notebook, and a committed exemplary run; see
+[`docs/README.md`](docs/README.md) for the index and
+[`docs/supplemental_reading.md`](docs/supplemental_reading.md) for the background.
+
 **Milestone 1 — Harness + E1 (clean-room signaling).** The roadmap's first
 buildable step (`plan/beetle-box.md` §7): a multi-agent orchestration harness
 with declarative configs, strict seeding, constrained communication channels,
@@ -58,8 +64,17 @@ lexicon 4/16) where bare identification encodes full identity (gap 0.0, lexicon
 15/16) — evidence the form of life is load-bearing. See
 [`docs/e5_forms_of_life.md`](docs/e5_forms_of_life.md).
 
-Experiment E6 is scaffolded but not yet implemented. A consolidated, per-experiment
-bibliography is in [`docs/supplemental_reading.md`](docs/supplemental_reading.md).
+**E6 — the reflexive layer (§ capstone / finale).** The meta-example made a
+condition: two frontier agents coordinate, then are turned to examine whether they
+share meaning; we measure whether that self-examination *changes the coordination*
+(a control-subtracted, seed-averaged behavioral effect) rather than reading the
+transcripts. The reflection produces fluent talk of shared understanding and leaves
+the practice untouched — the irony of §1 reproduced as a number. Its frozen
+pre-registration is the strictest in the project (transcripts are never evidence).
+See [`docs/e6_reflexive.md`](docs/e6_reflexive.md).
+
+A consolidated, per-experiment bibliography is in
+[`docs/supplemental_reading.md`](docs/supplemental_reading.md).
 
 Run E5:
 

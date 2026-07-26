@@ -132,3 +132,11 @@ def test_e5_from_dict_ignores_unknown_keys():
     cfg = from_dict_e5({"seed": 1, "bogus": 2, "experiment": {"grounded": True, "x": 9}})
     assert cfg.seed == 1
     assert cfg.experiment.grounded is True
+
+
+def test_e6_from_dict_and_hash():
+    from beetlebox.config import E6Config, from_dict_e6
+    cfg = from_dict_e6({"intervention": "control", "rounds_per_block": 8, "bogus": 1})
+    assert cfg.intervention == "control"
+    assert cfg.rounds_per_block == 8
+    assert config_hash(cfg) == config_hash(E6Config(intervention="control", rounds_per_block=8))

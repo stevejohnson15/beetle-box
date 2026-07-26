@@ -126,8 +126,8 @@ directly at the LLM question.* Approach doc: [`e5_forms_of_life.md`](e5_forms_of
 ## E6 — The reflexive layer
 
 *Target: the meta-example — agents examining whether their own coordination
-constitutes shared meaning or its shadow (observer folded into observed). Planned;
-strictest pre-registration.* See `plan/beetle-box.md` §4.6.
+constitutes shared meaning or its shadow (observer folded into observed); strictest
+pre-registration.* Approach doc: [`e6_reflexive.md`](e6_reflexive.md).
 
 - **"The Bewitching AI"** (2025) and **"Mechanistic Indicators of Understanding"**
   (2026) — both above; the shadow-vs-understanding framing E6 turns on itself.
