@@ -1,0 +1,51 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# FROZEN pre-registration for E4 (quus / rule-following; Kripke). Behavioral layer.
+# Hypotheses, conditions, and thresholds fixed BEFORE running (plan §3.2). Analysis
+# imports only these criteria. Do not tune to a result.
+
+experiment: e4_quus
+frozen: true
+version: 1
+date: 2026-07-26
+
+target: >
+  Kripke's rule-following skepticism. Finite examples below the bend-point are
+  consistent with plus, quus, and infinitely many other rules; nothing in them
+  fixes which rule is being followed. We make the underdetermination manipulable by
+  reading out what seeded students extrapolate above the bend, and whether they
+  agree.
+
+conditions:
+  - scalar:  operands representable as values -> a simplicity prior can extend plus
+      past the bend. Expect convergence toward plus.
+  - onehot:  each operand value independent -> above-bend outputs are unconstrained
+      by training. Expect divergence (no rule fixed).
+
+hypotheses:
+  H_shared_prior_resolves: >
+    With a representable (scalar) encoding, students converge toward plus: plus_rate
+    >= scalar_min_plus_rate and cross_seed_agreement >= scalar_min_agreement. A
+    shared inductive prior quietly resolves the underdetermination.
+  H_underdetermination_visible: >
+    With a onehot encoding, students neither recover plus nor agree with each other:
+    plus_rate <= onehot_max_plus_rate and cross_seed_agreement <= onehot_max_agreement.
+    The underdetermination is unresolved and visible.
+
+thresholds:
+  scalar_min_plus_rate: 0.60
+  scalar_min_agreement: 0.50
+  onehot_max_plus_rate: 0.20
+  onehot_max_agreement: 0.60
+
+licenses: |
+  This does NOT resolve Kripke's skepticism. Convergence toward plus (scalar) does
+  not show the students "grasp plus" -- it shows a shared inductive prior selecting
+  one of the infinitely many rules the data allows; the prior is a longer finite
+  fact, not an independent criterion. Divergence (onehot) makes the underdetermination
+  visible but likewise settles nothing. The payload is the CONTRAST -- which is then
+  handed to the mechanistic layer (see docs/e4_quus.md): even opening the box, two
+  models on identical data need not implement the same algorithm. Report the gap
+  between behavioral underdetermination and mechanistic (non-)determinacy; do not
+  claim to have dissolved the skepticism. (plan §4.4)

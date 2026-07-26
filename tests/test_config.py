@@ -93,3 +93,23 @@ def test_e2_from_dict_ignores_unknown_keys():
     cfg = from_dict_e2({"seed": 1, "bogus": 2, "diarist": {"memory": "none", "x": 9}})
     assert cfg.seed == 1
     assert cfg.diarist.memory == "none"
+
+
+def test_e4_roundtrip_and_hash():
+    from beetlebox.config import E4RunConfig, from_dict_e4
+    cfg = E4RunConfig(seed=4)
+    cfg.quus.encoding = "onehot"
+    cfg.quus.bend = 6
+    cfg.experiment.num_seeds = 5
+    rebuilt = from_dict_e4(to_dict(cfg))
+    assert rebuilt.quus.encoding == "onehot"
+    assert rebuilt.quus.bend == 6
+    assert rebuilt.experiment.num_seeds == 5
+    assert config_hash(rebuilt) == config_hash(cfg)
+
+
+def test_e4_from_dict_ignores_unknown_keys():
+    from beetlebox.config import from_dict_e4
+    cfg = from_dict_e4({"seed": 1, "bogus": 2, "quus": {"encoding": "scalar", "x": 9}})
+    assert cfg.seed == 1
+    assert cfg.quus.encoding == "scalar"

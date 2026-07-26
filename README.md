@@ -41,7 +41,23 @@ manufactures perfect "same again" consistency (≈1.0) that no memory cannot (�
 is a real check or a longer private impression is exactly what the number cannot
 settle. Clean-room + rich modes. See [`docs/e2_diarist.md`](docs/e2_diarist.md).
 
-Experiments E4, E5, E6 are scaffolded but not yet implemented.
+**E4 — quus / rule-following (§ Kripke).** Two layers. *Behavioral:* seeded
+students trained only on below-bend examples (where plus and quus agree)
+extrapolate above the bend — converging toward plus under a representable encoding
+(shared prior resolving the underdetermination) or diverging under a one-hot one.
+*Mechanistic:* a from-scratch transformer **groks** modular addition, then its
+Fourier circuit is read out and two seeds are compared — they need not implement
+the same algorithm. The payload is the gap between behavioral underdetermination
+and mechanistic (non-)determinacy. See [`docs/e4_quus.md`](docs/e4_quus.md).
+
+Experiments E5, E6 are scaffolded but not yet implemented.
+
+Run E4 (behavioral):
+
+```bash
+uv run python experiments/e4_quus/run.py -m quus=scalar,onehot
+uv run python -m beetlebox.analysis.e4 results/<hash>/seed0
+```
 
 Run E2:
 

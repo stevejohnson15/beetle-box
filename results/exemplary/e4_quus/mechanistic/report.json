@@ -1,0 +1,30 @@
+{
+  "modulus": 53,
+  "d_model": 128,
+  "steps": 25000,
+  "seeds": {
+    "0": {
+      "final_train_acc": 1.0,
+      "final_val_acc": 0.9978647828102112,
+      "grokked": true,
+      "key_frequencies": [
+        17,
+        8,
+        5
+      ],
+      "concentration": 0.896
+    },
+    "1": {
+      "final_train_acc": 1.0,
+      "final_val_acc": 0.9957295656204224,
+      "grokked": true,
+      "key_frequencies": [
+        2,
+        22,
+        5
+      ],
+      "concentration": 0.88
+    }
+  },
+  "cross_seed_algorithmic_agreement": 0.2
+}

@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Representable operands -> a simplicity prior can extend plus past the bend.
+max_operand: 12
+bend: 8
+modulus: 24
+quus_value: 0
+encoding: scalar

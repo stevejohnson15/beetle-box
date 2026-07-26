@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# Root Hydra config for E4 (quus / rule-following, behavioral layer). E.g.:
+#   python experiments/e4_quus/run.py -m quus=scalar,onehot
+#   python experiments/e4_quus/run.py quus=scalar learner.weight_decay=0.01
+
+defaults:
+  - experiment: e4_default
+  - quus: scalar
+  - learner: default
+  - _self_
+
+seed: 0
+device: cpu
+output_dir: results
+
+hydra:
+  job:
+    chdir: false
