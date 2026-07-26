@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# Root Hydra config for E5 (forms of life / grounding). E.g.:
+#   python experiments/e5_forms_of_life/run.py -m experiment=e5_grounded,e5_ungrounded
+# E5 needs a grid env (attributes) and a multi-symbol channel.
+
+defaults:
+  - experiment: e5_grounded
+  - channel: wide
+  - env: grid
+  - agent: default
+  - _self_
+
+seed: 0
+device: cpu
+output_dir: results
+
+hydra:
+  job:
+    chdir: false

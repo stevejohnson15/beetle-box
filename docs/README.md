@@ -37,6 +37,10 @@ Cross-link the three: the approach doc points at the notebook and exemplary run;
 the notebook cites the approach doc; the exemplary README names the exact command
 and config that produced it.
 
+**Background reading.** [`supplemental_reading.md`](supplemental_reading.md) is the
+consolidated, per-experiment academic bibliography — the philosophy and technical
+literature needed to understand and extend the framework.
+
 ## Index
 
 | Experiment | Approach | Notebook | Exemplary run |
@@ -45,7 +49,8 @@ and config that produced it.
 | E2 — the private diarist (§258) | [`e2_diarist.md`](e2_diarist.md) | [`../notebooks/e2_diarist.ipynb`](../notebooks/e2_diarist.ipynb) | [`../results/exemplary/e2_diarist/`](../results/exemplary/e2_diarist/) |
 | E3 — the beetle-box (§293) | [`e3_design.md`](e3_design.md) | [`../notebooks/e3_beetle_box.ipynb`](../notebooks/e3_beetle_box.ipynb) | [`../results/exemplary/e3_beetle_box/`](../results/exemplary/e3_beetle_box/) |
 | E4 — quus / rule-following | [`e4_quus.md`](e4_quus.md) | [`../notebooks/e4_quus.ipynb`](../notebooks/e4_quus.ipynb) | [`../results/exemplary/e4_quus/`](../results/exemplary/e4_quus/) |
-| E5, E6 | *(pending)* | *(pending)* | *(pending)* |
+| E5 — forms of life / grounding | [`e5_forms_of_life.md`](e5_forms_of_life.md) | [`../notebooks/e5_forms_of_life.ipynb`](../notebooks/e5_forms_of_life.ipynb) | [`../results/exemplary/e5_forms_of_life/`](../results/exemplary/e5_forms_of_life/) |
+| E6 | *(pending)* | *(pending)* | *(pending)* |
 
 ## Running the notebooks
 

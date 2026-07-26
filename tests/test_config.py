@@ -113,3 +113,22 @@ def test_e4_from_dict_ignores_unknown_keys():
     cfg = from_dict_e4({"seed": 1, "bogus": 2, "quus": {"encoding": "scalar", "x": 9}})
     assert cfg.seed == 1
     assert cfg.quus.encoding == "scalar"
+
+
+def test_e5_roundtrip_and_hash():
+    from beetlebox.config import E5RunConfig, from_dict_e5
+    cfg = E5RunConfig(seed=5)
+    cfg.experiment.grounded = False
+    cfg.env.mode = "grid"
+    cfg.channel.message_length = 2
+    rebuilt = from_dict_e5(to_dict(cfg))
+    assert rebuilt.experiment.grounded is False
+    assert rebuilt.env.mode == "grid"
+    assert config_hash(rebuilt) == config_hash(cfg)
+
+
+def test_e5_from_dict_ignores_unknown_keys():
+    from beetlebox.config import from_dict_e5
+    cfg = from_dict_e5({"seed": 1, "bogus": 2, "experiment": {"grounded": True, "x": 9}})
+    assert cfg.seed == 1
+    assert cfg.experiment.grounded is True
