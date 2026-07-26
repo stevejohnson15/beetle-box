@@ -50,3 +50,14 @@ def test_topsim_perfect_correlation_on_grid():
     out = metrics.topographic_similarity(mapping, env, ch)
     assert out["applicable"]
     assert out["rho"] > 0.99
+
+
+def test_convention_stability_nan_when_too_few_snapshots():
+    import math
+    val = metrics.convention_stability([{"mapping": [[0]]}], window=5)
+    assert math.isnan(val)
+
+
+def test_mapping_agreement_handles_length_mismatch():
+    # Defensive: mismatched mapping lengths -> 0.0 rather than crashing.
+    assert metrics._mapping_agreement([[0], [1]], [[0]]) == 0.0

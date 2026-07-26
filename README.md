@@ -51,8 +51,22 @@ uv run python experiments/e3_beetle_box/run.py mode=rich box=shared rich.num_rou
 Requires [`uv`](https://docs.astral.sh/uv/) and Python ≥ 3.11.
 
 ```bash
-uv sync --extra dev
+uv sync --extra dev            # library + test tooling
+uv sync --extra notebooks      # add the demonstration-notebook tooling
 ```
+
+## Development & testing
+
+```bash
+uv run pytest --cov            # full suite with the coverage gate (fail_under=90; ~96%)
+uv run ruff check              # lint
+# verify a demonstration notebook executes end-to-end:
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/e1_signaling.ipynb
+```
+
+All code is held to a documentation + test standard (module/public-API docstrings,
+inline *why* comments, unit tests for every public behavior, and the coverage gate);
+see [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Run E1
 

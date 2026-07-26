@@ -25,3 +25,12 @@ def test_torch_determinism():
 
 def test_returns_seed():
     assert seed_everything(99) == 99
+
+
+def test_seed_everything_non_deterministic_flag():
+    # The deterministic=False path should still seed reproducibly.
+    seed_everything(5, deterministic=False)
+    a = np.random.rand(3)
+    seed_everything(5, deterministic=False)
+    b = np.random.rand(3)
+    assert np.array_equal(a, b)

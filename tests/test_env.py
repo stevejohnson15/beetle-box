@@ -32,3 +32,9 @@ def test_sampling_is_seeded():
     idx_a, _ = env.sample_batch(np.random.default_rng(0), 10)
     idx_b, _ = env.sample_batch(np.random.default_rng(0), 10)
     assert np.array_equal(idx_a, idx_b)
+
+
+def test_unknown_env_mode_raises():
+    import pytest
+    with pytest.raises(ValueError):
+        SignalingEnv(EnvConfig(mode="bogus"))

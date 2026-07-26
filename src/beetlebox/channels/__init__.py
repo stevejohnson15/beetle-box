@@ -33,6 +33,7 @@ class SymbolChannel:
 
     @classmethod
     def from_config(cls, cfg: ChannelConfig) -> SymbolChannel:
+        """Build a channel from a :class:`~beetlebox.config.ChannelConfig`."""
         return cls(cfg.vocab_size, cfg.message_length)
 
     @property

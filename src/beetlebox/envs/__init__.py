@@ -47,10 +47,12 @@ class SignalingEnv:
     # -- geometry ---------------------------------------------------------- #
     @property
     def num_classes(self) -> int:
+        """Number of distinct referents ``K``."""
         return self._num_classes
 
     @property
     def feature_dim(self) -> int:
+        """Dimension of a referent's feature vector (the sender's input width)."""
         return self._features.shape[1]
 
     def _grid_features(self, attrs: np.ndarray) -> np.ndarray:
@@ -66,6 +68,7 @@ class SignalingEnv:
         return self._features[indices]
 
     def attributes_for(self, index: int) -> np.ndarray:
+        """Return the attribute vector for a referent (a single value in flat mode)."""
         return self._attribute_table[index]
 
     def referent_distance(self, i: int, j: int) -> int:

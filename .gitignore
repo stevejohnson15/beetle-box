@@ -47,3 +47,8 @@ notebooks/*
 
 # OS
 .DS_Store
+
+# Coverage artifacts
+.coverage
+htmlcov/
+coverage.xml

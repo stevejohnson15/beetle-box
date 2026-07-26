@@ -164,6 +164,8 @@ class RunManager:
         self._log("turnover", step=step)
 
     def run(self) -> dict[str, Any]:
+        """Train for ``num_steps`` (applying turnover if configured), logging periodic
+        evals; return the run summary (final accuracy, mapping, guesses, chance)."""
         exp = self.cfg.experiment
         turnover_step = int(exp.turnover_at * exp.num_steps) if exp.turnover else None
         chance = 1.0 / self.env.num_classes

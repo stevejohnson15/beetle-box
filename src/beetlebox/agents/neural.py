@@ -58,6 +58,7 @@ class NeuralSender(nn.Module, Agent):
         return message, logprob, entropy
 
     def reset_parameters(self) -> None:
+        """Reinitialize weights from scratch (used by the E1 turnover manipulation)."""
         for module in self.net:
             if isinstance(module, nn.Linear):
                 module.reset_parameters()
@@ -85,43 +86,11 @@ class NeuralReceiver(nn.Module, Agent):
         return self.net(flat)
 
     def predict(self, message: torch.Tensor) -> torch.Tensor:
+        """Greedy referent guess per message (argmax of the class logits)."""
         return self.forward(message).argmax(dim=-1)
 
     def reset_parameters(self) -> None:
-        self.embedding.reset_parameters()
-        for module in self.net:
-            if isinstance(module, nn.Linear):
-                module.reset_parameters()
-
-
-class BoxReceiver(nn.Module, Agent):
-    """Message + private box -> referent classifier (E3 private-referent game).
-
-    The receiver's own box is a real input, so a *shared* inner state can help
-    it decode where a *divergent* one cannot -- that difference is the measured
-    beetle-box result.
-    """
-
-    def __init__(self, vocab_size: int, message_length: int, num_classes: int,
-                 box_dim: int, embed_dim: int = 32, hidden_dim: int = 64, *,
-                 name: str = "box_receiver", memory: Memory | None = None) -> None:
-        nn.Module.__init__(self)
-        Agent.__init__(self, name=name, memory=memory)
-        self.embedding = nn.Embedding(vocab_size, embed_dim)
-        self.net = nn.Sequential(
-            nn.Linear(message_length * embed_dim + box_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, num_classes),
-        )
-
-    def forward(self, message: torch.Tensor, box: torch.Tensor) -> torch.Tensor:
-        emb = self.embedding(message).reshape(message.shape[0], -1)
-        return self.net(torch.cat([emb, box], dim=-1))
-
-    def predict(self, message: torch.Tensor, box: torch.Tensor) -> torch.Tensor:
-        return self.forward(message, box).argmax(dim=-1)
-
-    def reset_parameters(self) -> None:
+        """Reinitialize weights from scratch (used by the E1 turnover manipulation)."""
         self.embedding.reset_parameters()
         for module in self.net:
             if isinstance(module, nn.Linear):
@@ -159,9 +128,11 @@ class DiscriminationReceiver(nn.Module, Agent):
         return torch.einsum("bh,bkh->bk", q, k)  # score each candidate against the message
 
     def predict(self, message: torch.Tensor, candidate_boxes: torch.Tensor) -> torch.Tensor:
+        """Greedy target guess: the candidate whose box best matches the message."""
         return self.forward(message, candidate_boxes).argmax(dim=-1)
 
     def reset_parameters(self) -> None:
+        """Reinitialize weights from scratch."""
         self.embedding.reset_parameters()
         self.box_mlp.reset_parameters()
         for module in self.msg_mlp:
@@ -197,6 +168,11 @@ class MatchingAgent(nn.Module, Agent):
         )
 
     def speak(self, box: torch.Tensor, *, greedy: bool = False):
+        """Turn the private sensation (box) into a public message.
+
+        Returns ``(message[B, L], logprob[B], entropy[B])``; sampled unless
+        ``greedy`` (REINFORCE needs the sample and its log-prob).
+        """
         logits = self.speaker(box).view(-1, self.message_length, self.vocab_size)
         dist = Categorical(logits=logits)
         message = logits.argmax(dim=-1) if greedy else dist.sample()
@@ -205,10 +181,12 @@ class MatchingAgent(nn.Module, Agent):
         return message, logprob, entropy
 
     def judge(self, box: torch.Tensor, partner_message: torch.Tensor) -> torch.Tensor:
+        """Same/different logits from the agent's own box + the partner's message."""
         emb = self.embedding(partner_message).reshape(partner_message.shape[0], -1)
         return self.judge_net(torch.cat([box, emb], dim=-1))
 
     def reset_parameters(self) -> None:
+        """Reinitialize weights from scratch."""
         for net in (self.speaker, self.judge_net):
             for module in net:
                 if isinstance(module, nn.Linear):

@@ -65,6 +65,7 @@ class RunLogger:
         )
 
     def close(self) -> None:
+        """Close the events file handle (idempotent)."""
         if not self._fh.closed:
             self._fh.close()
 

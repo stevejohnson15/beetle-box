@@ -56,7 +56,9 @@ class _Chooser(Protocol):
     usage: dict[str, int]
     num_calls: int
 
-    def choose(self, system: str, user: str, choices: Any) -> int: ...
+    def choose(self, system: str, user: str, choices: Any) -> int:
+        """Return one integer from ``choices`` given the system+user prompts."""
+        ...
 
 
 class RichPrivateReferentRunner:

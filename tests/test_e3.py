@@ -78,3 +78,61 @@ def test_score_game_shared_helps(tmp_path):
     ]
     result = score_game(dirs)
     assert result["checks"]["beetle_gap"]["verdict"] == "shared_inner_state_helps"
+
+
+def test_unknown_game_raises():
+    import pytest
+    cfg = _cfg("shared", game="bogus_game")
+    with pytest.raises(ValueError):
+        E3RunManager(cfg)
+
+
+def test_greedy_convention_rejects_matching_game():
+    import pytest
+    mgr = E3RunManager(_cfg("shared", game="sensation_matching"))
+    with pytest.raises(ValueError):
+        mgr.greedy_convention()
+
+
+def test_channel_ablation_rejects_non_private_game():
+    import pytest
+    mgr = E3RunManager(_cfg("shared", game="public_referent_aux"))
+    with pytest.raises(ValueError):
+        mgr.channel_ablation()
+
+
+def test_public_referent_aux_runs_and_beats_chance():
+    summary = E3RunManager(_cfg("shared", game="public_referent_aux")).run()
+    assert summary["chance"] == 0.125
+    assert summary["final_accuracy"] > 0.5
+
+
+def test_greedy_convention_shapes_for_private_referent():
+    mgr = E3RunManager(_cfg("divergent"))
+    conv = mgr.greedy_convention()
+    assert len(conv["mapping"]) == mgr.num_states
+    assert len(conv["guesses"]) == mgr.num_states
+
+
+def test_score_game_rejects_mixed_games(tmp_path):
+    import pytest
+    dirs = [
+        _write_run(tmp_path, "shared", "private_referent", 1.0, 0.125),
+        _write_run(tmp_path, "divergent", "sensation_matching", 0.9, 0.5),
+    ]
+    with pytest.raises(ValueError):
+        score_game(dirs)
+
+
+def test_score_game_report_renders(tmp_path):
+    from beetlebox.analysis.e3 import _format_report
+    dirs = [
+        _write_run(tmp_path, "shared", "private_referent", 1.0, 0.125),
+        _write_run(tmp_path, "divergent", "private_referent", 0.9, 0.125),
+        _write_run(tmp_path, "empty", "private_referent", 0.12, 0.125),
+        _write_run(tmp_path, "noise", "private_referent", 0.13, 0.125),
+    ]
+    report = _format_report(score_game(dirs))
+    assert "E3 report" in report
+    assert "earnable-cancellation" in report
+    assert "beetle gap" in report

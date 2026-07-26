@@ -125,6 +125,7 @@ def render_run(run_dir: str, steps: list[int] | None = None) -> str:
 
 
 def main() -> None:
+    """CLI: print a run's exchange transcript reconstructed from its event log."""
     ap = argparse.ArgumentParser(description="Print the E1 signaling exchange transcript.")
     ap.add_argument("run_dir", help="path to results/<config_hash>/seed<seed>")
     ap.add_argument("--steps", type=int, nargs="*", default=None,

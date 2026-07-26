@@ -264,10 +264,12 @@ class E3RunManager:
                 else self._referential_step())
 
     def evaluate(self) -> float:
+        """Greedy coordination accuracy for the current game."""
         return (self._matching_eval() if self.game == "sensation_matching"
                 else self._referential_eval())
 
     def run(self) -> dict[str, Any]:
+        """Train for ``num_steps``, logging periodic evals; return the run summary."""
         exp = self.cfg.experiment
         chance = 0.5 if self.game == "sensation_matching" else 1.0 / self.num_states
         self._log("run_start", game=self.game, condition=self.cfg.box.condition,

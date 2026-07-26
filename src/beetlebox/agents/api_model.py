@@ -67,5 +67,6 @@ class ApiAgent(Agent):
         text = next((b.text for b in response.content if b.type == "text"), "")
         return int(json.loads(text)["choice"])
 
-    def reset_parameters(self) -> None:  # frontier agents have no trainable state
+    def reset_parameters(self) -> None:
+        """No-op: frontier agents have no trainable state to reinitialize."""
         return None
