@@ -57,7 +57,7 @@ class E3RunManager:
         self.device = torch.device(cfg.device)
         self.game = cfg.experiment.game
 
-        self.env = SignalingEnv(cfg.env)
+        self.env = SignalingEnv.from_config(cfg.env)
         self.channel = SymbolChannel.from_config(cfg.channel)
         self.num_states = self.env.num_classes
         self.box = BoxScheme(cfg.box.condition, num_agents=2, num_states=self.num_states,

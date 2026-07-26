@@ -7,7 +7,7 @@ from beetlebox.envs import SignalingEnv
 
 
 def test_flat_env_shapes():
-    env = SignalingEnv(EnvConfig(mode="flat", num_referents=8))
+    env = SignalingEnv.from_config(EnvConfig(mode="flat", num_referents=8))
     assert env.num_classes == 8
     assert env.feature_dim == 8
     feats = env.features_for(np.arange(8))
@@ -16,7 +16,7 @@ def test_flat_env_shapes():
 
 
 def test_grid_env_shapes_and_distance():
-    env = SignalingEnv(EnvConfig(mode="grid", num_attributes=2, num_values=4))
+    env = SignalingEnv.from_config(EnvConfig(mode="grid", num_attributes=2, num_values=4))
     assert env.num_classes == 16
     assert env.feature_dim == 2 * 4
     # Referent 0 = (0,0); the distance to itself is 0, to a one-attribute change is 1.
@@ -28,7 +28,7 @@ def test_grid_env_shapes_and_distance():
 
 
 def test_sampling_is_seeded():
-    env = SignalingEnv(EnvConfig(mode="flat", num_referents=6))
+    env = SignalingEnv.from_config(EnvConfig(mode="flat", num_referents=6))
     idx_a, _ = env.sample_batch(np.random.default_rng(0), 10)
     idx_b, _ = env.sample_batch(np.random.default_rng(0), 10)
     assert np.array_equal(idx_a, idx_b)
@@ -37,4 +37,4 @@ def test_sampling_is_seeded():
 def test_unknown_env_mode_raises():
     import pytest
     with pytest.raises(ValueError):
-        SignalingEnv(EnvConfig(mode="bogus"))
+        SignalingEnv.from_config(EnvConfig(mode="bogus"))

@@ -149,19 +149,36 @@ agent turnover) are Hydra config overrides and support `--multirun` sweeps.
 configs/            declarative experiment + condition configs (Hydra)
 prereg/             pre-registered hypotheses & scoring thresholds (frozen, versioned)
 src/beetlebox/
-  config.py         dataclass config schema + stable config_hash (Hydra-independent)
-  seeding.py        deterministic global/per-run seeding
-  harness/          multi-agent turn loop + run manager        [extraction candidate]
-  agents/           Agent ABC; from-scratch neural sender/receiver
-  memory/           toggleable per-agent memory (interface; used fully in E2)
-  channels/         invented-vocabulary communication channels  [extraction candidate]
-  envs/             signaling-game environment + referent generators
-  runlog/           structured, replayable JSONL run logs        [extraction candidate]
-  analysis/         scoring; imports only frozen prereg criteria [extraction candidate]
-  mech/             mechanistic sub-stack placeholder (E4)
-experiments/        one directory per experiment (E1 implemented)
+  config.py         dataclass config schema (config_hash delegated to reprolog)
+  seeding.py        -> reprolog (re-export shim)
+  harness/          experiment-specific run managers (built on agentharness)
+  agents/           from-scratch neural sender/receiver; Agent/ApiAgent -> agentharness
+  memory/           -> agentharness (re-export shim)
+  channels/         -> emcomkit (re-export shim)
+  envs/             experiment envs (percept/grounded/quus); SignalingEnv -> emcomkit
+  runlog/           -> reprolog (re-export shim)
+  analysis/         scoring; metrics -> emcomkit, prereg -> frozenprereg
+  mech/             mechanistic sub-stack (E4 grokking transformer)
+experiments/        one directory per experiment (E1–E6 implemented)
 results/            run outputs, keyed by config hash + seed (gitignored)
 ```
+
+## Extracted libraries
+
+Four domain-agnostic components have been extracted into standalone, Apache-2.0,
+PyPI-ready libraries; Beetle-Box now consumes them (pinned to their `v0.1.0`
+GitHub tags via `[tool.uv.sources]` until they are published to PyPI). Each
+attributes Beetle-Box as its origin.
+
+| Library | What it provides |
+|---|---|
+| [reprolog](https://github.com/stevejohnson15/reprolog) | Reproducible run logging: deterministic seeding, config-hash run keys, append-only JSONL event/manifest logs. |
+| [frozenprereg](https://github.com/stevejohnson15/frozenprereg) | Pre-registration + frozen scoring: load versioned criteria that must be fixed before a run. |
+| [emcomkit](https://github.com/stevejohnson15/emcomkit) | Emergent-communication toolkit: invented symbol channels, referent generators, compositionality metrics, transcript formatters. |
+| [agentharness](https://github.com/stevejohnson15/agentharness) | Multi-agent harness: framework-free `Agent`/`ChoiceAgent`, toggleable memory, a backend registry with an Anthropic frontier backend, and a generic run loop. |
+
+Existing `beetlebox.*` import paths continue to work: the extracted modules are
+thin re-export shims over the libraries.
 
 ## License & attribution
 
@@ -169,11 +186,11 @@ Beetle-Box is licensed under the **Apache License 2.0** — see [`LICENSE`](LICE
 and [`NOTICE`](NOTICE). It permits full reuse and requires only proper
 attribution.
 
-Several components (the orchestration harness, the emergent-communication
-channel toolkit, the pre-registration/scoring framework, and the reproducible
-run-logging layer) are written behind clean module boundaries so they can later
-be extracted as **standalone open-source libraries**. Any such spun-out library
-remains Apache-2.0 and attributes Beetle-Box as its origin.
+Several components (the multi-agent harness, the emergent-communication toolkit,
+the pre-registration/scoring framework, and the reproducible run-logging layer)
+have been extracted into **standalone open-source libraries** — see
+[Extracted libraries](#extracted-libraries) above. Each remains Apache-2.0 and
+attributes Beetle-Box as its origin.
 
 Every source file carries an `SPDX-License-Identifier: Apache-2.0` header; please
 keep these headers on new files. See [`CONTRIBUTING.md`](CONTRIBUTING.md).

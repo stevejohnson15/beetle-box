@@ -28,67 +28,27 @@ import argparse
 from collections.abc import Iterator
 from typing import Any
 
+# The pure exchange formatters were extracted into the standalone, Apache-2.0
+# `emcomkit` package (https://github.com/stevejohnson15/emcomkit); re-exported so
+# existing `beetlebox.analysis.transcript` imports keep working. The run-reading
+# code below stays in Beetle-Box because it reads reprolog run logs + configs.
+from emcomkit.transcript import (
+    convention_rows,
+    format_convention,
+    format_exchanges,
+)
+
 from beetlebox.channels import SymbolChannel
 from beetlebox.config import from_dict
 from beetlebox.runlog import iter_events, read_manifest
 
-_OK, _NO = "OK", "x"
-
-
-def _render_message(message: list[int]) -> str:
-    return "-".join(f"s{int(s)}" for s in message)
-
-
-def convention_rows(mapping: list[list[int]], guesses: list[int]) -> list[dict[str, Any]]:
-    """Per-referent exchange rows, flagging message collisions and misses."""
-    seen: dict[str, int] = {}
-    rows = []
-    for r, (msg, guess) in enumerate(zip(mapping, guesses, strict=True)):
-        key = _render_message(msg)
-        collides_with = seen.get(key)
-        seen.setdefault(key, r)
-        rows.append({
-            "referent": r,
-            "message": msg,
-            "message_str": key,
-            "guess": guess,
-            "correct": r == guess,
-            "collision_with": collides_with,  # earlier referent sharing this message
-        })
-    return rows
-
-
-def format_convention(mapping: list[list[int]], guesses: list[int], *,
-                      step: int | None = None, accuracy: float | None = None) -> str:
-    """Render one convention snapshot as an aligned table."""
-    rows = convention_rows(mapping, guesses)
-    header = "convention snapshot"
-    if step is not None:
-        header += f" @ step {step}"
-    if accuracy is not None:
-        header += f"  (accuracy {accuracy:.3f})"
-    lines = [header, "  referent  sender says   receiver guesses   result"]
-    for row in rows:
-        flag = _OK if row["correct"] else _NO
-        note = ""
-        if row["collision_with"] is not None:
-            note = f"   <- collides with referent {row['collision_with']}"
-        lines.append(f"  {row['referent']:>8}  {row['message_str']:>11}   "
-                     f"{row['guess']:>16}   [{flag}]{note}")
-    n_correct = sum(r["correct"] for r in rows)
-    lines.append(f"  {n_correct}/{len(rows)} referents correctly communicated")
-    return "\n".join(lines)
-
-
-def format_exchanges(exchanges: list[dict[str, Any]]) -> str:
-    """Render a list of individual trials as back-and-forth lines."""
-    lines = ["exchange log (individual trials):"]
-    for i, ex in enumerate(exchanges):
-        flag = _OK if ex["correct"] else _NO
-        lines.append(f"  trial {i:>3}: referent {ex['referent']} "
-                     f"-> sender says {_render_message(ex['message'])} "
-                     f"-> receiver guesses {ex['guess']}  [{flag}]")
-    return "\n".join(lines)
+__all__ = [
+    "convention_rows",
+    "format_convention",
+    "format_exchanges",
+    "iter_snapshots",
+    "render_run",
+]
 
 
 # --------------------------------------------------------------------------- #

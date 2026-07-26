@@ -67,7 +67,7 @@ def score_run(run_dir: str, prereg_path: str = DEFAULT_PREREG) -> dict[str, Any]
     manifest = read_manifest(run_dir)
     end = next((e for e in iter_events(run_dir) if e.get("event") == "run_end"), {})
     grounded = end.get("grounded", manifest["config"]["experiment"]["grounded"])
-    env = SignalingEnv(EnvConfig(**manifest["config"]["env"]))
+    env = SignalingEnv.from_config(EnvConfig(**manifest["config"]["env"]))
 
     recover, lexicon = recoverability(end["final_mapping"], env)
     relevant = recover[0]

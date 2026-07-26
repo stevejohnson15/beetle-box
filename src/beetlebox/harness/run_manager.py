@@ -42,7 +42,7 @@ class RunManager:
         self.rng = np.random.default_rng(cfg.seed)
         self.device = torch.device(cfg.device)
 
-        self.env = SignalingEnv(cfg.env)
+        self.env = SignalingEnv.from_config(cfg.env)
         self.channel = SymbolChannel.from_config(cfg.channel)
 
         self.sender = NeuralSender(

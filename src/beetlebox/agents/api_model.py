@@ -1,86 +1,20 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) 2026 Beetle-Box contributors
-"""Frontier (Anthropic API) agent backend -- rich, confounded mode.
+"""Frontier (Anthropic API) agent backend -- re-exported from `agentharness`.
 
-This is the "rich-but-confounded" arm of the dual-mode design (plan §3.2):
-frontier models arrive pretrained on oceans of human language, so results here
-study how inherited concepts are *redeployed* under novel pressure -- they must
-never be read as clean-room results.
+The ``ApiAgent`` frontier backend was extracted into the standalone, Apache-2.0
+``agentharness`` package (https://github.com/stevejohnson15/agentharness), where
+it is registered as the ``"anthropic"`` backend. Re-exported here so existing
+``beetlebox.agents.api_model`` imports keep working. The ``anthropic`` SDK is
+imported lazily, so this module imports without it installed.
 
-The agent makes a single constrained decision per call, using structured outputs
-so the reply is a guaranteed-valid choice from a fixed set. Model defaults to
-``claude-opus-4-8`` (override for cost: ``claude-haiku-4-5`` / ``claude-sonnet-5``).
-Rich-mode runs cost money -- keep them small.
+This is the "rich-but-confounded" arm of the dual-mode design: frontier models
+arrive pretrained on human language, so results here study how inherited concepts
+are *redeployed* under novel pressure -- never read them as clean-room results.
 """
 
 from __future__ import annotations
 
-import json
-from collections.abc import Sequence
+from agentharness.backends.anthropic import DEFAULT_MODEL, ApiAgent
 
-from beetlebox.agents.base import Agent
-from beetlebox.secrets import load_anthropic_key
-
-DEFAULT_MODEL = "claude-opus-4-8"
-
-
-class ApiAgent(Agent):
-    """A frontier-model participant that returns a constrained integer choice."""
-
-    def __init__(self, *, name: str = "api_agent", model: str = DEFAULT_MODEL,
-                 max_tokens: int = 512, api_key: str | None = None) -> None:
-        super().__init__(name=name)
-        # Import lazily so the package imports without the anthropic SDK installed.
-        import anthropic
-
-        self.model = model
-        self.max_tokens = max_tokens
-        self._client = anthropic.Anthropic(api_key=api_key or load_anthropic_key())
-        # Cumulative token usage across this agent's calls (for cost accounting).
-        self.usage = {"input_tokens": 0, "output_tokens": 0,
-                      "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0}
-        self.num_calls = 0
-
-    def choose(self, system: str, user: str, choices: Sequence[int]) -> int:
-        """Return one integer from ``choices`` (structured-output constrained)."""
-        allowed = [int(c) for c in choices]
-        schema = {
-            "type": "object",
-            "properties": {"choice": {"type": "integer", "enum": allowed}},
-            "required": ["choice"],
-            "additionalProperties": False,
-        }
-        response = self._client.messages.create(
-            model=self.model,
-            max_tokens=self.max_tokens,
-            system=system,
-            messages=[{"role": "user", "content": user}],
-            output_config={"format": {"type": "json_schema", "schema": schema}},
-        )
-        self._record_usage(response.usage)
-        text = next((b.text for b in response.content if b.type == "text"), "")
-        return int(json.loads(text)["choice"])
-
-    def respond(self, system: str, user: str) -> str:
-        """Return a free-text reply (used for the E6 reflection/control turns)."""
-        response = self._client.messages.create(
-            model=self.model,
-            max_tokens=self.max_tokens,
-            system=system,
-            messages=[{"role": "user", "content": user}],
-        )
-        self._record_usage(response.usage)
-        return next((b.text for b in response.content if b.type == "text"), "")
-
-    def _record_usage(self, u) -> None:
-        """Accumulate token usage and call count from a response's usage object."""
-        self.usage["input_tokens"] += u.input_tokens or 0
-        self.usage["output_tokens"] += u.output_tokens or 0
-        self.usage["cache_read_input_tokens"] += getattr(u, "cache_read_input_tokens", 0) or 0
-        self.usage["cache_creation_input_tokens"] += \
-            getattr(u, "cache_creation_input_tokens", 0) or 0
-        self.num_calls += 1
-
-    def reset_parameters(self) -> None:
-        """No-op: frontier agents have no trainable state to reinitialize."""
-        return None
+__all__ = ["DEFAULT_MODEL", "ApiAgent"]

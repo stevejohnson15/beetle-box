@@ -16,13 +16,16 @@ different seeds/hardware lands under one config directory.
 from __future__ import annotations
 
 import dataclasses
-import hashlib
-import json
 from dataclasses import dataclass, field, is_dataclass
 from typing import Any
 
-# Fields excluded from config_hash: they do not change the condition under test.
-_HASH_EXCLUDED_TOP_LEVEL = ("seed", "output_dir", "device")
+# Deterministic (de)serialization + condition hashing now live in the extracted
+# `reprolog` library; re-exported here so `beetlebox.config` remains the import
+# site for the whole codebase. reprolog's config_hash excludes the same top-level
+# fields (seed/output_dir/device) by default.
+from reprolog import canonical_json, config_hash, to_dict
+
+__all__ = ["canonical_json", "config_hash", "to_dict"]
 
 
 @dataclass
@@ -324,17 +327,6 @@ class E6Config:
 # --------------------------------------------------------------------------- #
 # (de)serialization + hashing
 # --------------------------------------------------------------------------- #
-def to_dict(cfg: Any) -> dict[str, Any]:
-    """Recursively convert a dataclass config to a plain dict."""
-    if is_dataclass(cfg) and not isinstance(cfg, type):
-        return {f.name: to_dict(getattr(cfg, f.name)) for f in dataclasses.fields(cfg)}
-    if isinstance(cfg, (list, tuple)):
-        return [to_dict(v) for v in cfg]
-    if isinstance(cfg, dict):
-        return {k: to_dict(v) for k, v in cfg.items()}
-    return cfg
-
-
 def from_dict(data: dict[str, Any]) -> RunConfig:
     """Build a :class:`RunConfig` from a plain dict (e.g. a Hydra DictConfig).
 
@@ -457,17 +449,3 @@ def from_dict_e6(data: dict[str, Any]) -> E6Config:
     """Build an :class:`E6Config` from a plain dict (flat; unknown keys ignored)."""
     fields = {f.name for f in dataclasses.fields(E6Config)}
     return E6Config(**{k: v for k, v in dict(data).items() if k in fields})
-
-
-def canonical_json(cfg: Any) -> str:
-    """Deterministic JSON string of a config (sorted keys, no whitespace drift)."""
-    return json.dumps(to_dict(cfg), sort_keys=True, separators=(",", ":"))
-
-
-def config_hash(cfg: RunConfig, length: int = 12) -> str:
-    """Stable content hash of the *condition* (excludes seed/device/output_dir)."""
-    d = to_dict(cfg)
-    for k in _HASH_EXCLUDED_TOP_LEVEL:
-        d.pop(k, None)
-    payload = json.dumps(d, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:length]

@@ -24,6 +24,14 @@ dependencies = [
     "scipy>=1.11",
     "hydra-core>=1.3",
     "anthropic>=0.69",
+    # Components extracted from Beetle-Box into standalone Apache-2.0 libraries.
+    # Not on PyPI yet -- resolved from sibling checkouts via [tool.uv.sources]
+    # below. After they are published, delete that section and these pins resolve
+    # from PyPI.
+    "reprolog>=0.1",
+    "frozenprereg>=0.1",
+    "emcomkit>=0.1",
+    "agentharness>=0.1",
 ]
 
 [project.optional-dependencies]
@@ -50,6 +58,16 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/beetlebox"]
+
+# The extracted libraries are not on PyPI yet; resolve them from their GitHub
+# release tags. After they are published to PyPI, delete this section and the
+# version pins above resolve normally. For local co-development of a library,
+# swap its line for `{ path = "../<lib>", editable = true }`.
+[tool.uv.sources]
+reprolog = { git = "https://github.com/stevejohnson15/reprolog", tag = "v0.1.0" }
+frozenprereg = { git = "https://github.com/stevejohnson15/frozenprereg", tag = "v0.1.0" }
+emcomkit = { git = "https://github.com/stevejohnson15/emcomkit", tag = "v0.1.0" }
+agentharness = { git = "https://github.com/stevejohnson15/agentharness", tag = "v0.1.0" }
 
 [tool.ruff]
 line-length = 100
