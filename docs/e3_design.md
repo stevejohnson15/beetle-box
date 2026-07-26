@@ -132,15 +132,17 @@ Both arms run E3 (plan §3.2); never let one masquerade as the other.
   pretrained agents *redeploy* inherited concepts. **Costs money** (~2×rounds API
   calls); defaults are small; model configurable (`rich.model`).
 
-> ⚠️ **Known limitation — the rich `private_referent` runner still uses the older
-> (leaky) framing:** the receiver is told its own sensation code for the target and
-> asked to name it, so over rounds it can learn to read its own box rather than the
-> message (the same leak the clean-room game had before the discrimination fix). The
-> earlier frontier sweep (shared 0.83 / divergent 0.88 / empty 0.25) is therefore
-> **not a trustworthy communication result** and should be treated as a
-> not-yet-corrected data point. Porting the discrimination design to the in-context
-> runner (and re-running) is a tracked follow-up; until then, rely on the clean-room
-> arm for the beetle-box claim.
+The rich runner uses the **same discrimination design** as the clean-room game
+(the receiver sees its code for every candidate and must use the sender's symbol),
+so it is leak-free by construction. `run(drop_message=True)` is the in-context
+analog of `channel_ablation`: withholding the symbol must drop accuracy to chance.
+
+> **History.** An earlier rich runner used the pre-fix framing (receiver told only
+> its code for the *target*), which leaked — its sweep (shared 0.83 / divergent 0.88
+> / empty 0.25) is **void**. A small live check of the corrected runner (Haiku, 4
+> objects, 12 rounds) gives shared ≈0.75, empty ≈chance, and **shared with the
+> message withheld ≈chance** — i.e. the public symbol is genuinely carrying the
+> signal.
 
 ---
 
