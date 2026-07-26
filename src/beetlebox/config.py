@@ -198,6 +198,72 @@ class E2RunConfig:
 
 
 # --------------------------------------------------------------------------- #
+# E4 (quus / rule-following) configuration
+# --------------------------------------------------------------------------- #
+@dataclass
+class QuusConfig:
+    """The quus task (see :mod:`beetlebox.envs.quus`)."""
+
+    max_operand: int = 12  # operands range over [0, max_operand)
+    bend: int = 8  # bend-point k: training pairs have max(a,b) < k
+    modulus: int = 24  # outputs taken mod this (>= 2*max_operand => plain addition)
+    quus_value: int = 0  # what quus returns at/above the bend
+    # How operands are represented -- the axis that decides whether shared priors
+    # can resolve the underdetermination: "scalar" (value, extrapolable ->
+    # simplicity prior favors plus) or "onehot" (each operand independent, so
+    # above-bend values are unconstrained -> total divergence).
+    encoding: str = "scalar"
+
+
+@dataclass
+class RuleLearnerConfig:
+    """The from-scratch learner that extrapolates the underdetermined rule."""
+
+    hidden_dim: int = 64
+    learning_rate: float = 5e-3
+    num_steps: int = 4000
+    weight_decay: float = 0.0  # >0 biases toward simpler (more plus-like) rules
+
+
+@dataclass
+class E4ExperimentConfig:
+    """The E4 behavioral protocol: how many seeded students to compare."""
+
+    name: str = "e4_quus"
+    num_seeds: int = 8  # independent students on identical below-bend data
+
+
+@dataclass
+class E4RunConfig:
+    """Top-level E4 (behavioral) run configuration."""
+
+    seed: int = 0
+    device: str = "cpu"
+    output_dir: str = "results"
+    experiment: E4ExperimentConfig = field(default_factory=E4ExperimentConfig)
+    quus: QuusConfig = field(default_factory=QuusConfig)
+    learner: RuleLearnerConfig = field(default_factory=RuleLearnerConfig)
+
+
+@dataclass
+class GrokkingConfig:
+    """The mechanistic sub-stack: a small transformer grokking modular addition."""
+
+    modulus: int = 53  # prime p; task is (a + b) mod p
+    train_frac: float = 0.5  # fraction of the p*p pairs used for training
+    d_model: int = 128
+    n_heads: int = 4
+    num_steps: int = 20000
+    learning_rate: float = 1e-3
+    weight_decay: float = 1.0  # the weight decay that drives grokking
+    batch_size: int = 512  # <=0 means full-batch
+    eval_every: int = 200
+    seed: int = 0
+    device: str = "cpu"
+    output_dir: str = "results"
+
+
+# --------------------------------------------------------------------------- #
 # (de)serialization + hashing
 # --------------------------------------------------------------------------- #
 def to_dict(cfg: Any) -> dict[str, Any]:
@@ -284,6 +350,27 @@ def from_dict_e2(data: dict[str, Any]) -> E2RunConfig:
         return cls(**kwargs)
 
     return _build(E2RunConfig, dict(data))
+
+
+def from_dict_e4(data: dict[str, Any]) -> E4RunConfig:
+    """Build an :class:`E4RunConfig` from a plain dict (e.g. a Hydra DictConfig)."""
+    sub = {
+        "experiment": E4ExperimentConfig,
+        "quus": QuusConfig,
+        "learner": RuleLearnerConfig,
+    }
+
+    def _build(cls, values: dict[str, Any] | None):
+        values = values or {}
+        kwargs = {}
+        for f in dataclasses.fields(cls):
+            if f.name not in values:
+                continue
+            v = values[f.name]
+            kwargs[f.name] = _build(sub[f.name], dict(v)) if f.name in sub else v
+        return cls(**kwargs)
+
+    return _build(E4RunConfig, dict(data))
 
 
 def canonical_json(cfg: Any) -> str:

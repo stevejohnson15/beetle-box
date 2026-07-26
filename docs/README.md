@@ -44,7 +44,8 @@ and config that produced it.
 | E1 — convention from use (signaling) | [`e1_signaling.md`](e1_signaling.md) | [`../notebooks/e1_signaling.ipynb`](../notebooks/e1_signaling.ipynb) | [`../results/exemplary/e1_signaling/`](../results/exemplary/e1_signaling/) |
 | E2 — the private diarist (§258) | [`e2_diarist.md`](e2_diarist.md) | [`../notebooks/e2_diarist.ipynb`](../notebooks/e2_diarist.ipynb) | [`../results/exemplary/e2_diarist/`](../results/exemplary/e2_diarist/) |
 | E3 — the beetle-box (§293) | [`e3_design.md`](e3_design.md) | [`../notebooks/e3_beetle_box.ipynb`](../notebooks/e3_beetle_box.ipynb) | [`../results/exemplary/e3_beetle_box/`](../results/exemplary/e3_beetle_box/) |
-| E4, E5, E6 | *(pending)* | *(pending)* | *(pending)* |
+| E4 — quus / rule-following | [`e4_quus.md`](e4_quus.md) | [`../notebooks/e4_quus.ipynb`](../notebooks/e4_quus.ipynb) | [`../results/exemplary/e4_quus/`](../results/exemplary/e4_quus/) |
+| E5, E6 | *(pending)* | *(pending)* | *(pending)* |
 
 ## Running the notebooks
 

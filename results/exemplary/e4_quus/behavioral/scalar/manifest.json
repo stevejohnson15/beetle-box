@@ -1,0 +1,29 @@
+{
+  "config": {
+    "device": "cpu",
+    "experiment": {
+      "name": "e4_quus",
+      "num_seeds": 8
+    },
+    "learner": {
+      "hidden_dim": 64,
+      "learning_rate": 0.005,
+      "num_steps": 4000,
+      "weight_decay": 0.0
+    },
+    "output_dir": "results",
+    "quus": {
+      "bend": 8,
+      "encoding": "scalar",
+      "max_operand": 12,
+      "modulus": 24,
+      "quus_value": 0
+    },
+    "seed": 0
+  },
+  "config_hash": "9c6cd553859e",
+  "created": "2026-07-26T09:08:41-0500",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python": "3.13.5",
+  "seed": 0
+}

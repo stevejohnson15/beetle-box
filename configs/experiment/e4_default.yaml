@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+name: e4_quus
+num_seeds: 8
