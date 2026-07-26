@@ -42,3 +42,11 @@ uv run ruff check
 Library code (`harness/`, `channels/`, `runlog/`, `analysis/`) must stay
 Hydra-independent — it consumes plain dataclass configs so it can be extracted
 later. Hydra is confined to `experiments/*/run.py`.
+
+## Documentation pattern (every experiment)
+
+Each experiment ships three things — an approach doc, a working notebook, and
+(where appropriate) a committed exemplary run. The convention and the running
+instructions are in [`docs/README.md`](docs/README.md); follow it for E1–E6 and
+anything added later. New demonstration notebooks must execute end-to-end
+(`uv run jupyter nbconvert --to notebook --execute --inplace notebooks/<nb>.ipynb`).

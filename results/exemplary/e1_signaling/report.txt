@@ -1,0 +1,12 @@
+E1 report -- results/b6067ef6f269/seed0
+  config_hash=b6067ef6f269  seed=0  feedback=True
+  final_accuracy=1.000  chance=0.125
+  convention_stability=1.0
+  pre-registered checks:
+    [PASS] emergence
+    [PASS] stability
+  what this does / does not license:
+    Demonstrates the thin meaning-as-use thesis and establishes the baseline that
+    later experiments perturb. It does NOT, by itself, say anything about
+    "understanding," inner states, or whether the agents share a form of life. A
+    stable convention here is public practice, nothing more. (plan/beetle-box.md §4.1)

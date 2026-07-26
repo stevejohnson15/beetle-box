@@ -124,8 +124,33 @@ class RunManager:
         pred = self.receiver.predict(message)
         target = torch.as_tensor(indices, dtype=torch.long, device=self.device)
         accuracy = float((pred == target).float().mean())
-        mapping = message.cpu().numpy().tolist()  # [K][L]
-        return {"accuracy": accuracy, "mapping": mapping}
+        mapping = message.cpu().numpy().tolist()  # [K][L]  sender: referent -> message
+        guesses = pred.cpu().numpy().tolist()  # [K]  receiver: message -> referent guess
+        # Logging guesses (not just the mapping) lets a full exchange transcript be
+        # reconstructed from the event stream alone -- no model weights needed.
+        return {"accuracy": accuracy, "mapping": mapping, "guesses": guesses}
+
+    @torch.no_grad()
+    def sample_exchanges(self, n: int, *, greedy: bool = False) -> list[dict[str, Any]]:
+        """Sample ``n`` individual sender->receiver trials (the live "chatter").
+
+        Each trial: a referent is drawn, the sender emits a message (stochastic
+        unless ``greedy``), the receiver guesses. Returns one dict per trial with
+        the referent, the message, the guess, and whether it succeeded. This is
+        the per-trial view; :meth:`evaluate` is the whole-convention snapshot.
+        """
+        idx = self.rng.integers(0, self.env.num_classes, size=n)
+        feats = torch.as_tensor(self.env.features_for(idx), dtype=torch.float32,
+                                device=self.device)
+        message, _, _ = self.sender.act(feats, greedy=greedy)
+        guess = self.receiver.predict(message)
+        msgs = message.cpu().numpy().tolist()
+        guesses = guess.cpu().numpy().tolist()
+        return [
+            {"referent": int(idx[i]), "message": msgs[i], "guess": int(guesses[i]),
+             "correct": int(idx[i]) == int(guesses[i])}
+            for i in range(n)
+        ]
 
     # ------------------------------------------------------------------ #
     def _do_turnover(self, step: int) -> None:
@@ -154,13 +179,14 @@ class RunManager:
             if step % exp.eval_every == 0 or step == exp.num_steps:
                 ev = self.evaluate()
                 self._log("eval", step=step, accuracy=ev["accuracy"],
-                          mapping=ev["mapping"], **last_train)
+                          mapping=ev["mapping"], guesses=ev["guesses"], **last_train)
 
         final = self.evaluate()
         summary = {
             "final_accuracy": final["accuracy"],
             "chance": chance,
             "final_mapping": final["mapping"],
+            "final_guesses": final["guesses"],
             "turnover_step": turnover_step,
             "num_classes": self.env.num_classes,
             "bandwidth": self.channel.bandwidth,
