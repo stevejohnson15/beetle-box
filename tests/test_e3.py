@@ -24,6 +24,19 @@ def test_private_referent_earnable_cancellation():
     assert shared - empty >= 0.25
 
 
+def test_private_referent_no_leak_message_is_load_bearing():
+    # The fix: the receiver cannot solve the task from its own boxes alone.
+    # With the public message zeroed, accuracy must collapse to chance -- i.e. the
+    # sender->receiver channel is doing the work (no receiver-side leak).
+    cfg = _cfg("shared")
+    cfg.experiment.num_steps = 2000
+    mgr = E3RunManager(cfg)
+    mgr.run()
+    abl = mgr.channel_ablation()
+    assert abl["full"] > 0.6
+    assert abl["message_zeroed"] <= abl["chance"] + 0.10  # message removed -> ~chance
+
+
 def test_e3_run_is_deterministic():
     a = E3RunManager(_cfg("divergent")).run()
     b = E3RunManager(_cfg("divergent")).run()

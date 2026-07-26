@@ -1,0 +1,51 @@
+### box condition: shared (accuracy 1.000) ###
+convention snapshot
+  referent  sender says   receiver guesses   result
+         0           s0                  0   [OK]
+         1           s6                  1   [OK]
+         2           s1                  2   [OK]
+         3           s7                  3   [OK]
+         4           s3                  4   [OK]
+         5           s2                  5   [OK]
+         6           s4                  6   [OK]
+         7           s5                  7   [OK]
+  8/8 referents correctly communicated
+
+### box condition: divergent (accuracy 0.887) ###
+convention snapshot
+  referent  sender says   receiver guesses   result
+         0           s4                  0   [OK]
+         1           s0                  1   [OK]
+         2           s1                  5   [x]
+         3           s6                  3   [OK]
+         4           s3                  4   [OK]
+         5           s1                  5   [OK]   <- collides with referent 2
+         6           s5                  6   [OK]
+         7           s2                  7   [OK]
+  7/8 referents correctly communicated
+
+### box condition: empty (accuracy 0.122) ###
+convention snapshot
+  referent  sender says   receiver guesses   result
+         0           s2                  0   [OK]
+         1           s2                  0   [x]   <- collides with referent 0
+         2           s2                  0   [x]   <- collides with referent 0
+         3           s2                  0   [x]   <- collides with referent 0
+         4           s2                  0   [x]   <- collides with referent 0
+         5           s2                  0   [x]   <- collides with referent 0
+         6           s2                  0   [x]   <- collides with referent 0
+         7           s2                  0   [x]   <- collides with referent 0
+  1/8 referents correctly communicated
+
+### box condition: noise (accuracy 0.141) ###
+convention snapshot
+  referent  sender says   receiver guesses   result
+         0           s0                  5   [x]
+         1           s0                  5   [x]   <- collides with referent 0
+         2           s5                  5   [x]
+         3           s0                  5   [x]   <- collides with referent 0
+         4           s5                  5   [x]   <- collides with referent 2
+         5           s0                  5   [OK]   <- collides with referent 0
+         6           s2                  5   [x]
+         7           s2                  5   [x]   <- collides with referent 6
+  1/8 referents correctly communicated

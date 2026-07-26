@@ -19,6 +19,16 @@ Box conditions mirror the clean-room design:
   empty     - no sensation code (sender is blind -> coordination floor)
   noise     - a random code, unrelated to the object
 
+.. warning::
+   **Known leak (tracked follow-up).** This runner still uses the pre-fix framing:
+   the receiver is told its own sensation code for the target and asked to name it,
+   so over rounds it can learn to read its own box and ignore the sender's message
+   (the same receiver-side leak the clean-room ``private_referent`` game had before
+   it was reformulated as a discrimination game; see ``docs/e3_design.md``). Its
+   numbers are therefore NOT a trustworthy communication result. Rely on the
+   clean-room arm for the beetle-box claim until this is ported to the
+   discrimination design and re-run.
+
 **Cost warning.** This makes ~``2 * num_rounds`` API calls per run. Defaults are
 deliberately small. Scale up only deliberately.
 """

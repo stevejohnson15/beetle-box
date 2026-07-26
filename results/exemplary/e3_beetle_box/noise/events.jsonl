@@ -1,0 +1,32 @@
+{"box_informative": false, "chance": 0.125, "condition": "noise", "event": "run_start", "feedback": true, "game": "private_referent", "wall_time": 1785061824.562476}
+{"accuracy": 0.128125, "event": "eval", "step": 100, "train_acc": 0.09375, "wall_time": 1785061824.662324}
+{"accuracy": 0.1328125, "event": "eval", "step": 200, "train_acc": 0.125, "wall_time": 1785061824.7626398}
+{"accuracy": 0.128125, "event": "eval", "step": 300, "train_acc": 0.34375, "wall_time": 1785061824.8629289}
+{"accuracy": 0.128125, "event": "eval", "step": 400, "train_acc": 0.15625, "wall_time": 1785061824.961637}
+{"accuracy": 0.121875, "event": "eval", "step": 500, "train_acc": 0.21875, "wall_time": 1785061825.0598552}
+{"accuracy": 0.1234375, "event": "eval", "step": 600, "train_acc": 0.0625, "wall_time": 1785061825.158161}
+{"accuracy": 0.1421875, "event": "eval", "step": 700, "train_acc": 0.125, "wall_time": 1785061825.257382}
+{"accuracy": 0.115625, "event": "eval", "step": 800, "train_acc": 0.0, "wall_time": 1785061825.356139}
+{"accuracy": 0.1171875, "event": "eval", "step": 900, "train_acc": 0.125, "wall_time": 1785061825.454855}
+{"accuracy": 0.11875, "event": "eval", "step": 1000, "train_acc": 0.09375, "wall_time": 1785061825.554107}
+{"accuracy": 0.1046875, "event": "eval", "step": 1100, "train_acc": 0.125, "wall_time": 1785061825.654328}
+{"accuracy": 0.121875, "event": "eval", "step": 1200, "train_acc": 0.125, "wall_time": 1785061825.7551901}
+{"accuracy": 0.1078125, "event": "eval", "step": 1300, "train_acc": 0.1875, "wall_time": 1785061825.855985}
+{"accuracy": 0.13125, "event": "eval", "step": 1400, "train_acc": 0.15625, "wall_time": 1785061825.956177}
+{"accuracy": 0.11875, "event": "eval", "step": 1500, "train_acc": 0.125, "wall_time": 1785061826.055639}
+{"accuracy": 0.121875, "event": "eval", "step": 1600, "train_acc": 0.1875, "wall_time": 1785061826.154762}
+{"accuracy": 0.115625, "event": "eval", "step": 1700, "train_acc": 0.0625, "wall_time": 1785061826.2536151}
+{"accuracy": 0.1265625, "event": "eval", "step": 1800, "train_acc": 0.125, "wall_time": 1785061826.35165}
+{"accuracy": 0.128125, "event": "eval", "step": 1900, "train_acc": 0.0625, "wall_time": 1785061826.4504929}
+{"accuracy": 0.128125, "event": "eval", "step": 2000, "train_acc": 0.09375, "wall_time": 1785061826.549886}
+{"accuracy": 0.109375, "event": "eval", "step": 2100, "train_acc": 0.125, "wall_time": 1785061826.64867}
+{"accuracy": 0.1265625, "event": "eval", "step": 2200, "train_acc": 0.09375, "wall_time": 1785061826.7476459}
+{"accuracy": 0.1328125, "event": "eval", "step": 2300, "train_acc": 0.125, "wall_time": 1785061826.8476748}
+{"accuracy": 0.153125, "event": "eval", "step": 2400, "train_acc": 0.28125, "wall_time": 1785061826.947507}
+{"accuracy": 0.1234375, "event": "eval", "step": 2500, "train_acc": 0.125, "wall_time": 1785061827.049393}
+{"accuracy": 0.11875, "event": "eval", "step": 2600, "train_acc": 0.03125, "wall_time": 1785061827.1485472}
+{"accuracy": 0.13125, "event": "eval", "step": 2700, "train_acc": 0.15625, "wall_time": 1785061827.2477639}
+{"accuracy": 0.1046875, "event": "eval", "step": 2800, "train_acc": 0.15625, "wall_time": 1785061827.345494}
+{"accuracy": 0.1375, "event": "eval", "step": 2900, "train_acc": 0.0625, "wall_time": 1785061827.4433641}
+{"accuracy": 0.1015625, "event": "eval", "step": 3000, "train_acc": 0.28125, "wall_time": 1785061827.540035}
+{"box_informative": false, "chance": 0.125, "condition": "noise", "event": "run_end", "final_accuracy": 0.140625, "game": "private_referent", "wall_time": 1785061827.544153}

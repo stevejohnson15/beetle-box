@@ -7,8 +7,16 @@
 
 experiment: e3_beetle_box
 frozen: true
-version: 1
-date: 2026-07-25
+version: 2
+date: 2026-07-26
+# v2 (2026-07-26): corrected the private_referent design. v1 handed the receiver its
+# own box for the target and asked it to classify the referent; because that box
+# encodes the referent, the receiver read its own box and ignored the message (a
+# receiver-side leak -- no communication; see docs/e3_design.md). v2 reformulates
+# private_referent as a discrimination game (receiver sees all candidate boxes and
+# must use the message to pick the target) and adds channel_ablation() as a
+# permanent no-leak guard. Thresholds and hypotheses are UNCHANGED; only the game
+# mechanics were fixed. v1 private_referent numbers are void.
 
 target: >
   §293 directly. A population coordinates on "inner states" through public words
@@ -16,12 +24,13 @@ target: >
   contents of the box do any work in the public language-game.
 
 games:  # all three are supported (a framework for exploration); see docs/e3_design.md
-  - private_referent:   the sender's only access to the referent is its box; a
-      box-aware receiver identifies it. The centerpiece.
+  - private_referent:   the sender's only access to the referent is its box; the
+      receiver must identify it from ALL candidate boxes using the public message
+      (discrimination game -> message is load-bearing, no leak). The centerpiece.
   - sensation_matching: two agents privately sense a type, exchange public words,
       and jointly judge same/different.
   - public_referent_aux: referent public to the sender, box an auxiliary channel
-      (weakest wiring; included for contrast).
+      to the sender only; receiver decodes the message (weakest wiring; contrast).
 
 conditions: [shared, divergent, empty, noise]
 

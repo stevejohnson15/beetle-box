@@ -1,0 +1,41 @@
+{
+  "config": {
+    "agent": {
+      "embed_dim": 32,
+      "entropy_coef": 0.01,
+      "hidden_dim": 64,
+      "learning_rate": 0.001
+    },
+    "box": {
+      "box_dim": 16,
+      "condition": "empty"
+    },
+    "channel": {
+      "message_length": 1,
+      "vocab_size": 8
+    },
+    "device": "cpu",
+    "env": {
+      "mode": "flat",
+      "num_attributes": 2,
+      "num_referents": 8,
+      "num_values": 4
+    },
+    "experiment": {
+      "batch_size": 32,
+      "eval_batches": 20,
+      "eval_every": 100,
+      "feedback": true,
+      "game": "private_referent",
+      "name": "e3_beetle_box",
+      "num_steps": 3000
+    },
+    "output_dir": "results",
+    "seed": 0
+  },
+  "config_hash": "89c7fc85d842",
+  "created": "2026-07-26T05:30:21-0500",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python": "3.13.5",
+  "seed": 0
+}

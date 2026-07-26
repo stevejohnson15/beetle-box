@@ -42,7 +42,7 @@ and config that produced it.
 | Experiment | Approach | Notebook | Exemplary run |
 |---|---|---|---|
 | E1 — convention from use (signaling) | [`e1_signaling.md`](e1_signaling.md) | [`../notebooks/e1_signaling.ipynb`](../notebooks/e1_signaling.ipynb) | [`../results/exemplary/e1_signaling/`](../results/exemplary/e1_signaling/) |
-| E3 — the beetle-box (§293) | [`e3_design.md`](e3_design.md) | *(pending)* | *(pending)* |
+| E3 — the beetle-box (§293) | [`e3_design.md`](e3_design.md) | [`../notebooks/e3_beetle_box.ipynb`](../notebooks/e3_beetle_box.ipynb) | [`../results/exemplary/e3_beetle_box/`](../results/exemplary/e3_beetle_box/) |
 | E2, E4, E5, E6 | *(pending)* | *(pending)* | *(pending)* |
 
 ## Running the notebooks

@@ -1,0 +1,15 @@
+E3 report -- game=private_referent  chance=0.125
+  final accuracy by condition:
+    shared    1.000
+    divergent 0.887
+    empty     0.122
+    noise     0.141
+  [PASS] earnable-cancellation: informative_mean=0.944 empty=0.122 gap=0.822
+  beetle gap (shared-divergent)=0.113 -> shared_inner_state_helps
+  what this does / does not license:
+    Makes the core claim of §293 a number. If empty/divergent-box agents coordinate
+    as fluently as shared-box agents, this is a working model of the beetle dropping
+    out; if a shared inner state measurably improves coordination, that counts
+    against the strong deflationary reading. Either way it does NOT settle whether
+    the agents "have" inner states, nor what those states are like. The four
+    conditions are our God's-eye control; the agents never get one. (plan §4.3)
