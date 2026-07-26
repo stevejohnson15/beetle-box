@@ -1,0 +1,5 @@
+private_referent / shared -- channel ablation (no-leak guard)
+  full communication    : 1.000
+  MESSAGE zeroed        : 0.156  (~chance 0.125)
+  receiver boxes zeroed : 0.156
+PASS: message zeroed -> chance, so the public channel carries the signal.

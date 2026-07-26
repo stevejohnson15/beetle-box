@@ -128,6 +128,47 @@ class BoxReceiver(nn.Module, Agent):
                 module.reset_parameters()
 
 
+class DiscriminationReceiver(nn.Module, Agent):
+    """Message + candidate boxes -> which candidate is the target (E3 private-referent).
+
+    The receiver is shown *all* candidates symmetrically -- each represented only by
+    the receiver's private box for it -- and must use the sender's public message to
+    pick the target. It scores candidate ``c`` by matching a query built from the
+    message against a key built from ``box_R(c)``. Crucially there is no single
+    "this is the target" box: with the message removed the candidates are
+    indistinguishable, so the public channel is *forced* to be load-bearing (no
+    leak -- unlike a plain classifier handed the target's own box).
+    """
+
+    def __init__(self, vocab_size: int, message_length: int, box_dim: int,
+                 embed_dim: int = 32, hidden_dim: int = 64, *,
+                 name: str = "discrimination_receiver", memory: Memory | None = None) -> None:
+        nn.Module.__init__(self)
+        Agent.__init__(self, name=name, memory=memory)
+        self.embedding = nn.Embedding(vocab_size, embed_dim)
+        self.msg_mlp = nn.Sequential(
+            nn.Linear(message_length * embed_dim, hidden_dim), nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim),
+        )
+        self.box_mlp = nn.Linear(box_dim, hidden_dim)
+
+    def forward(self, message: torch.Tensor, candidate_boxes: torch.Tensor) -> torch.Tensor:
+        """message ``[B, L]``, candidate_boxes ``[B, K, box_dim]`` -> logits ``[B, K]``."""
+        q = self.msg_mlp(self.embedding(message).reshape(message.shape[0], -1))  # [B, H]
+        k = self.box_mlp(candidate_boxes)  # [B, K, H]
+        return torch.einsum("bh,bkh->bk", q, k)  # score each candidate against the message
+
+    def predict(self, message: torch.Tensor, candidate_boxes: torch.Tensor) -> torch.Tensor:
+        return self.forward(message, candidate_boxes).argmax(dim=-1)
+
+    def reset_parameters(self) -> None:
+        self.embedding.reset_parameters()
+        self.box_mlp.reset_parameters()
+        for module in self.msg_mlp:
+            if isinstance(module, nn.Linear):
+                module.reset_parameters()
+
+
 class MatchingAgent(nn.Module, Agent):
     """Symmetric agent for the sensation same/different game (E3).
 

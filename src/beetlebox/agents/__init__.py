@@ -10,6 +10,7 @@ PyTorch; import :mod:`beetlebox.agents.base` directly to avoid that.
 from beetlebox.agents.base import Agent
 from beetlebox.agents.neural import (
     BoxReceiver,
+    DiscriminationReceiver,
     MatchingAgent,
     NeuralReceiver,
     NeuralSender,
@@ -20,5 +21,6 @@ __all__ = [
     "NeuralSender",
     "NeuralReceiver",
     "BoxReceiver",
+    "DiscriminationReceiver",
     "MatchingAgent",
 ]
