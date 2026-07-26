@@ -1,0 +1,52 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# FROZEN pre-registration for E2 (the private diarist, Philosophical Investigations
+# §258). Hypotheses, conditions, and thresholds fixed BEFORE running (plan §3.2).
+# Analysis imports only these criteria. Do not tune to a result.
+
+experiment: e2_diarist
+frozen: true
+version: 1
+date: 2026-07-26
+
+target: >
+  The private-language argument (§258). A diarist names a private percept stream
+  with self-invented terms under NO external correction. The question: does "same
+  again" stabilize, and if so, what does the stability rest on?
+
+conditions:
+  # Centerpiece: one diarist policy (prototype = match against past impressions),
+  # swept over the memory access that IS the manipulation.
+  - prototype/full:     unbounded diary -> can always check "same again"
+  - prototype/windowed: only the last W impressions -> "same again" fades with gaps
+  - prototype/none:     no diary -> every sensation named afresh (floor)
+  # Percept-space structure: clean vs. noisy "same again" (percept noise).
+  # Exploratory contrast policies: fixed_quantizer (a stateless public rule) and
+  # noisy_impression ("whatever seems right", no persistence).
+
+hypotheses:
+  H_memory_manufactures: >
+    In the clean regime, the diary manufactures the stability §258 says is
+    impossible without a check: prototype/full consistency >= full_memory_min while
+    prototype/none stays <= no_memory_max. The gap between them is memory's doing.
+  H_gaps_fade: >
+    With bounded memory, "same again" holds for short gaps but decays for long
+    ones: gap-conditioned short_gap > long_gap.
+  H_noise_collapses: >
+    When "same again" is genuinely ambiguous (high percept noise), even full memory
+    cannot stabilize naming: consistency falls sharply vs. the clean regime.
+
+thresholds:
+  full_memory_min_consistency: 0.90
+  no_memory_max_consistency: 0.10
+  gap_threshold: 20
+
+licenses: |
+  This does NOT refute Wittgenstein. The interesting case is precisely that
+  context-memory (the diary) can MANUFACTURE the stability §258 says is impossible
+  without an independent check. That forces the real question rather than settling
+  it: is the diary an INDEPENDENT check, or merely a longer private impression
+  masquerading as one? The diarist checks its own past impressions against its
+  present one -- there is still no external criterion. The consistency number
+  cannot tell these apart; report the dilemma, not a resolution. (plan §4.2)

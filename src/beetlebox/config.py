@@ -147,6 +147,57 @@ class E3RunConfig:
 
 
 # --------------------------------------------------------------------------- #
+# E2 (the diarist) configuration
+# --------------------------------------------------------------------------- #
+@dataclass
+class PerceptConfig:
+    """The private percept stream (see :mod:`beetlebox.envs.percept`)."""
+
+    num_types: int = 6  # K latent sensation types (God's-eye ground truth)
+    dim: int = 8  # percept vector dimension
+    noise: float = 0.25  # "clean vs. noisy same-again": std of per-percept noise
+
+
+@dataclass
+class DiaristConfig:
+    """The diarist naming policy and its memory access.
+
+    ``policy`` selects the namer; ``memory`` is E2's central manipulation and maps
+    to :func:`beetlebox.memory.make_memory` (``none`` -> NoMemory, ``windowed`` ->
+    bounded EpisodicMemory of ``window`` entries, ``full`` -> unbounded).
+    """
+
+    policy: str = "prototype"  # prototype | fixed_quantizer | noisy_impression
+    memory: str = "full"  # none | windowed | full  (prototype policy only)
+    window: int = 20  # capacity when memory == "windowed"
+    threshold: float = 2.0  # max distance to call a percept "the same again" (prototype)
+    quantizer_bins: int = 4  # bins per dim for fixed_quantizer
+    quantizer_scale: float = 3.0  # half-range the quantizer bins cover
+    impression_temp: float = 1.5  # stochasticity of the noisy-impression namer
+
+
+@dataclass
+class E2ExperimentConfig:
+    """The E2 protocol: how long the diary runs, and evaluation split."""
+
+    name: str = "e2_diarist"
+    num_steps: int = 2000
+    # Fraction boundary between the "early" and "late" halves for the drift metric.
+    drift_split: float = 0.5
+
+
+@dataclass
+class E2RunConfig:
+    """Top-level E2 run configuration."""
+
+    seed: int = 0
+    output_dir: str = "results"
+    experiment: E2ExperimentConfig = field(default_factory=E2ExperimentConfig)
+    percept: PerceptConfig = field(default_factory=PerceptConfig)
+    diarist: DiaristConfig = field(default_factory=DiaristConfig)
+
+
+# --------------------------------------------------------------------------- #
 # (de)serialization + hashing
 # --------------------------------------------------------------------------- #
 def to_dict(cfg: Any) -> dict[str, Any]:
@@ -212,6 +263,27 @@ def from_dict_e3(data: dict[str, Any]) -> E3RunConfig:
         return cls(**kwargs)
 
     return _build(E3RunConfig, dict(data))
+
+
+def from_dict_e2(data: dict[str, Any]) -> E2RunConfig:
+    """Build an :class:`E2RunConfig` from a plain dict (e.g. a Hydra DictConfig)."""
+    sub = {
+        "experiment": E2ExperimentConfig,
+        "percept": PerceptConfig,
+        "diarist": DiaristConfig,
+    }
+
+    def _build(cls, values: dict[str, Any] | None):
+        values = values or {}
+        kwargs = {}
+        for f in dataclasses.fields(cls):
+            if f.name not in values:
+                continue
+            v = values[f.name]
+            kwargs[f.name] = _build(sub[f.name], dict(v)) if f.name in sub else v
+        return cls(**kwargs)
+
+    return _build(E2RunConfig, dict(data))
 
 
 def canonical_json(cfg: Any) -> str:

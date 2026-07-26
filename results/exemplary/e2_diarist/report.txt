@@ -1,0 +1,29 @@
+E2 report -- results/1bbc29f7f267/seed0
+  policy=prototype  memory=full  noise=0.25
+  consistency=1.000  purity=0.906  distinct_terms=5
+  drift: early=1.000 late=1.000 drop=0.000
+  gap-conditioned: short=1.000 long=1.000 (threshold 20)
+  [PASS] stability_with_memory
+  what this does / does not license:
+    This does NOT refute Wittgenstein. The interesting case is precisely that
+    context-memory (the diary) can MANUFACTURE the stability §258 says is impossible
+    without an independent check. That forces the real question rather than settling
+    it: is the diary an INDEPENDENT check, or merely a longer private impression
+    masquerading as one? The diarist checks its own past impressions against its
+    present one -- there is still no external criterion. The consistency number
+    cannot tell these apart; report the dilemma, not a resolution. (plan §4.2)
+
+E2 report -- results/39252483ad09/seed0
+  policy=prototype  memory=none  noise=0.25
+  consistency=0.003  purity=1.000  distinct_terms=2000
+  drift: early=0.006 late=0.006 drop=0.000
+  gap-conditioned: short=0.000 long=0.000 (threshold 20)
+  [PASS] chance_without_memory
+  what this does / does not license:
+    This does NOT refute Wittgenstein. The interesting case is precisely that
+    context-memory (the diary) can MANUFACTURE the stability §258 says is impossible
+    without an independent check. That forces the real question rather than settling
+    it: is the diary an INDEPENDENT check, or merely a longer private impression
+    masquerading as one? The diarist checks its own past impressions against its
+    present one -- there is still no external criterion. The consistency number
+    cannot tell these apart; report the dilemma, not a resolution. (plan §4.2)

@@ -7,7 +7,8 @@ on the library's own dataclass configs (not Hydra), an extraction candidate for
 a standalone multi-agent orchestration package.
 """
 
+from beetlebox.harness.e2_manager import E2RunManager
 from beetlebox.harness.e3_manager import E3RunManager
 from beetlebox.harness.run_manager import RunManager
 
-__all__ = ["RunManager", "E3RunManager"]
+__all__ = ["RunManager", "E2RunManager", "E3RunManager"]

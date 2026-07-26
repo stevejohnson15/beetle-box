@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# Root Hydra config for E2 (the private diarist). Sweep the memory access:
+#   python experiments/e2_diarist/run.py -m diarist=full,windowed,none
+#   python experiments/e2_diarist/run.py diarist=full percept=noisy
+#   python experiments/e2_diarist/run.py diarist=fixed_quantizer
+
+defaults:
+  - experiment: e2_default
+  - percept: clean
+  - diarist: full
+  - _self_
+
+seed: 0
+output_dir: results
+
+hydra:
+  job:
+    chdir: false

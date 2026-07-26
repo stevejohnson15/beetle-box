@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+name: e2_diarist
+num_steps: 2000
+drift_split: 0.5
