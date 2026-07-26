@@ -1,6 +1,15 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) 2026 Beetle-Box contributors
-from beetlebox.config import RunConfig, config_hash, from_dict, to_dict
+from beetlebox.config import (
+    ChannelConfig,
+    E3RunConfig,
+    EnvConfig,
+    RunConfig,
+    config_hash,
+    from_dict,
+    from_dict_e3,
+    to_dict,
+)
 
 
 def test_hash_is_stable_and_seed_independent():
@@ -38,3 +47,30 @@ def test_from_dict_ignores_unknown_and_fills_defaults():
     assert cfg.seed == 3
     assert cfg.channel.vocab_size == 12
     assert cfg.channel.message_length == 1  # default preserved
+
+
+def test_channel_bandwidth_and_env_num_classes():
+    assert ChannelConfig(vocab_size=6, message_length=2).bandwidth == 36
+    assert EnvConfig(mode="flat", num_referents=8).num_classes == 8
+    assert EnvConfig(mode="grid", num_attributes=2, num_values=4).num_classes == 16
+
+
+def test_e3_roundtrip_and_hash_seed_independent():
+    cfg = E3RunConfig(seed=3)
+    cfg.experiment.game = "sensation_matching"
+    cfg.box.condition = "divergent"
+    rebuilt = from_dict_e3(to_dict(cfg))
+    assert rebuilt.experiment.game == "sensation_matching"
+    assert rebuilt.box.condition == "divergent"
+    assert config_hash(rebuilt) == config_hash(cfg)
+    # seed excluded from the condition hash
+    other = E3RunConfig(seed=99)
+    other.experiment.game = "sensation_matching"
+    other.box.condition = "divergent"
+    assert config_hash(other) == config_hash(cfg)
+
+
+def test_e3_from_dict_ignores_unknown_keys():
+    cfg = from_dict_e3({"seed": 1, "bogus": 2, "box": {"condition": "empty", "extra": 9}})
+    assert cfg.seed == 1
+    assert cfg.box.condition == "empty"

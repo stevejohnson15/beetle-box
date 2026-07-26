@@ -26,12 +26,12 @@ def seed_everything(seed: int, *, deterministic: bool = True) -> int:
         import torch
 
         torch.manual_seed(seed)
-        if torch.cuda.is_available():
+        if torch.cuda.is_available():  # pragma: no cover - GPU-only, not exercised in CI
             torch.cuda.manual_seed_all(seed)
         if deterministic:
             torch.backends.cudnn.deterministic = True
             torch.backends.cudnn.benchmark = False
-    except ImportError:
+    except ImportError:  # pragma: no cover - torch is a hard dependency here
         pass
 
     return seed

@@ -33,3 +33,9 @@ def test_episodic_capacity_is_a_ring_buffer():
 def test_factory_toggles_implementation():
     assert isinstance(make_memory(False), NoMemory)
     assert isinstance(make_memory(True), EpisodicMemory)
+
+
+def test_episodic_memory_rejects_bad_capacity():
+    import pytest
+    with pytest.raises(ValueError):
+        EpisodicMemory(capacity=0)

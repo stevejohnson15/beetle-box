@@ -39,6 +39,7 @@ class ChannelConfig:
 
     @property
     def bandwidth(self) -> int:
+        """Number of distinct messages the channel can express: ``V ** L``."""
         return self.vocab_size**self.message_length
 
 
@@ -59,6 +60,7 @@ class EnvConfig:
 
     @property
     def num_classes(self) -> int:
+        """Total number of referents ``K`` (``num_values ** num_attributes`` on a grid)."""
         if self.mode == "grid":
             return self.num_values**self.num_attributes
         return self.num_referents

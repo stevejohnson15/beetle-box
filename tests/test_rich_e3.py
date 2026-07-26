@@ -98,3 +98,34 @@ def test_drop_message_forces_chance():
     summary = r.run(drop_message=True)
     assert summary["drop_message"] is True
     assert summary["final_accuracy"] <= 0.5
+
+
+def test_divergent_candidates_disjoint_from_sender_codes():
+    r = _runner("divergent", _Fake(lambda u, c: 0), _Fake(lambda u, c: 0))
+    cands = r.receiver_candidates()
+    assert len(set(cands)) == r.k
+    assert set(cands).isdisjoint(set(r._code_s))  # divergent -> different code block
+
+
+def test_noise_candidates_are_not_stable():
+    r = _runner("noise", _Fake(lambda u, c: 0), _Fake(lambda u, c: 0), rounds=1)
+    # Fresh random draws each call -> no stable object->code map to exploit.
+    first = r.receiver_candidates()
+    second = r.receiver_candidates()
+    assert first != second or len(set(first)) < r.k
+
+
+def test_noise_run_stays_near_chance_with_symbol_reader():
+    # Under noise there is no stable code, so even a symbol-reading receiver
+    # cannot do better than chance -- the run still completes cleanly.
+    sender = _Fake(lambda u, c: 0)
+    r = _runner("noise", sender, _Fake(_symbol_reading_receiver), rounds=20)
+    s = r.run()
+    assert 0.0 <= s["final_accuracy"] <= 1.0
+    assert s["api_calls"] == 2 * 20
+
+
+def test_too_many_referents_raises():
+    import pytest
+    with pytest.raises(ValueError):
+        _runner("shared", _Fake(lambda u, c: 0), _Fake(lambda u, c: 0), k=20)

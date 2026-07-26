@@ -36,6 +36,12 @@ import numpy as np
 
 
 class BoxCondition(StrEnum):
+    """The four things a box can contain, relative to the God's-eye state.
+
+    ``SHARED``/``DIVERGENT`` carry the state (same code across agents vs. per-agent
+    codes); ``EMPTY``/``NOISE`` carry nothing about it.
+    """
+
     SHARED = "shared"
     DIVERGENT = "divergent"
     EMPTY = "empty"

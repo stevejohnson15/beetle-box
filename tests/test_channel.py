@@ -38,3 +38,9 @@ def test_invalid_construction():
 
 def test_render_is_not_english():
     assert SymbolChannel(8, 2).render([3, 1]) == "s3-s1"
+
+
+def test_message_distance_rejects_wrong_length():
+    ch = SymbolChannel(5, 3)
+    with pytest.raises(ValueError):
+        ch.message_distance([1, 2], [1, 2, 3])

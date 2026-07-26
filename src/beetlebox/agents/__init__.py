@@ -2,14 +2,18 @@
 # Copyright (c) 2026 Beetle-Box contributors
 """Agent backends for Beetle-Box.
 
-``Agent`` is the framework-free base; ``NeuralSender``/``NeuralReceiver`` are the
-from-scratch clean-room agents used by E1. Importing the neural agents pulls in
-PyTorch; import :mod:`beetlebox.agents.base` directly to avoid that.
+``Agent`` is the framework-free base. The rest are from-scratch (clean-room)
+PyTorch agents: ``NeuralSender``/``NeuralReceiver`` play E1 (referential signaling);
+``DiscriminationReceiver`` and ``MatchingAgent`` add E3's beetle-box games. The
+frontier (rich-mode) backend lives separately in :mod:`beetlebox.agents.api_model`,
+imported on demand so this module works without the ``anthropic`` SDK.
+
+Importing the neural agents pulls in PyTorch; import :mod:`beetlebox.agents.base`
+directly to avoid that.
 """
 
 from beetlebox.agents.base import Agent
 from beetlebox.agents.neural import (
-    BoxReceiver,
     DiscriminationReceiver,
     MatchingAgent,
     NeuralReceiver,
@@ -20,7 +24,6 @@ __all__ = [
     "Agent",
     "NeuralSender",
     "NeuralReceiver",
-    "BoxReceiver",
     "DiscriminationReceiver",
     "MatchingAgent",
 ]

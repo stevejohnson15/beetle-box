@@ -124,6 +124,7 @@ def _format_report(result: dict[str, Any]) -> str:
 
 
 def main() -> None:
+    """CLI: score one E1 run against its frozen prereg and print the report."""
     ap = argparse.ArgumentParser(description="Score an E1 run against its frozen prereg.")
     ap.add_argument("run_dir", help="path to results/<config_hash>/seed<seed>")
     ap.add_argument("--prereg", default=DEFAULT_PREREG, help="path to frozen prereg YAML")

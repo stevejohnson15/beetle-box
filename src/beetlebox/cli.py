@@ -17,6 +17,7 @@ from beetlebox import __version__
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Dispatch a ``beetlebox`` subcommand; returns the process exit code."""
     parser = argparse.ArgumentParser(prog="beetlebox", description="Beetle-Box utilities.")
     parser.add_argument("--version", action="version", version=f"beetlebox {__version__}")
     sub = parser.add_subparsers(dest="command")

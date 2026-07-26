@@ -29,6 +29,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "pytest-cov>=5.0",
     "ruff>=0.6",
 ]
 # Tooling for the demonstration notebooks (see docs/README.md).
@@ -64,3 +65,21 @@ select = ["E", "F", "I", "W", "UP", "B"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.coverage.run]
+source = ["beetlebox"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+# Coverage gate for the full suite (`uv run pytest --cov`). The bar is set below
+# the current level to leave headroom; new code is expected to keep it here or higher.
+fail_under = 90
+# The thin live-API surfaces are exercised by manual/live checks, not unit tests
+# (the surrounding logic is unit-tested via dependency injection). Exclude the
+# defensive/uninstrumentable lines from the coverage gate.
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]

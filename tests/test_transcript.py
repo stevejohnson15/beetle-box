@@ -56,3 +56,55 @@ def test_render_run_from_events(tmp_path):
     text = transcript.render_run(str(directory))
     assert "convention snapshot" in text
     assert "referents correctly communicated" in text
+
+
+def test_format_exchanges_renders_trials():
+    exchanges = [
+        {"referent": 3, "message": [6], "guess": 3, "correct": True},
+        {"referent": 1, "message": [2], "guess": 5, "correct": False},
+    ]
+    text = transcript.format_exchanges(exchanges)
+    assert "trial" in text
+    assert "referent 3" in text and "s6" in text
+
+
+def test_render_run_filters_steps(tmp_path):
+    from beetlebox.config import RunConfig, config_hash, to_dict
+    from beetlebox.runlog import RunLogger, run_dir
+    cfg = RunConfig(seed=0, output_dir=str(tmp_path))
+    cfg.experiment.num_steps = 300
+    cfg.experiment.eval_every = 100
+    directory = run_dir(cfg.output_dir, config_hash(cfg), cfg.seed)
+    with RunLogger(directory) as logger:
+        logger.write_manifest(to_dict(cfg), seed=cfg.seed, config_hash=config_hash(cfg))
+        RunManager(cfg, logger=logger).run()
+    text = transcript.render_run(str(directory), steps=[300])
+    assert "step 300" in text
+    assert "step 100" not in text
+
+
+def test_render_run_without_transcript_data(tmp_path):
+    from beetlebox.runlog import RunLogger
+    directory = tmp_path / "empty_run"
+    with RunLogger(directory) as logger:
+        logger.write_manifest({"channel": {"vocab_size": 8, "message_length": 1}},
+                              seed=0, config_hash="x")
+        logger.log("eval", step=100, accuracy=0.5, mapping=[[0]])  # no 'guesses'
+    text = transcript.render_run(str(directory))
+    assert "No transcript data" in text
+
+
+def test_transcript_main(tmp_path, monkeypatch, capsys):
+    from beetlebox.analysis import transcript as tmod
+    from beetlebox.config import RunConfig, config_hash, to_dict
+    from beetlebox.runlog import RunLogger, run_dir
+    cfg = RunConfig(seed=0, output_dir=str(tmp_path))
+    cfg.experiment.num_steps = 200
+    cfg.experiment.eval_every = 100
+    d = run_dir(cfg.output_dir, config_hash(cfg), cfg.seed)
+    with RunLogger(d) as logger:
+        logger.write_manifest(to_dict(cfg), seed=cfg.seed, config_hash=config_hash(cfg))
+        RunManager(cfg, logger=logger).run()
+    monkeypatch.setattr("sys.argv", ["transcript", str(d)])
+    tmod.main()
+    assert "convention snapshot" in capsys.readouterr().out

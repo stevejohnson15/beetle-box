@@ -39,3 +39,24 @@ def test_different_seeds_are_independent():
     b = RunManager(_fast_cfg(seed=2)).run()
     # Same condition, different seed: both should still learn a working convention.
     assert a["final_accuracy"] > 0.5 and b["final_accuracy"] > 0.5
+
+
+def test_turnover_convention_survives_founders():
+    cfg = RunConfig(seed=0)
+    cfg.experiment.num_steps = 2000
+    cfg.experiment.eval_every = 200
+    cfg.experiment.turnover = True
+    cfg.experiment.turnover_at = 0.5
+    summary = RunManager(cfg).run()
+    assert summary["turnover_step"] == 1000
+    # A fresh receiver re-adopts the incumbent convention -> high final accuracy.
+    assert summary["final_accuracy"] > 0.5
+
+
+def test_sample_exchanges_greedy_is_deterministic():
+    cfg = RunConfig(seed=0)
+    cfg.experiment.num_steps = 0
+    mgr = RunManager(cfg)
+    a = mgr.sample_exchanges(4, greedy=True)
+    b = mgr.sample_exchanges(4, greedy=True)
+    assert [e["message"] for e in a] == [e["message"] for e in b]

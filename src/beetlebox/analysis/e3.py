@@ -42,6 +42,12 @@ def _run_summary(run_dir: str) -> dict[str, Any]:
 
 
 def score_game(run_dirs: list[str], prereg_path: str = DEFAULT_PREREG) -> dict[str, Any]:
+    """Score one game's condition sweep against the frozen pre-registration.
+
+    ``run_dirs`` must be runs of the *same* game (one per box condition). Returns
+    per-condition accuracies plus the earnable-cancellation check and the
+    beetle-drops-out gap. Raises ``ValueError`` if the runs mix games.
+    """
     prereg = load_prereg(prereg_path)
     thr = prereg.get("thresholds", {})
     runs = [_run_summary(d) for d in run_dirs]
@@ -109,6 +115,7 @@ def _format_report(result: dict[str, Any]) -> str:
 
 
 def main() -> None:
+    """CLI: score an E3 condition sweep and print the report."""
     ap = argparse.ArgumentParser(description="Score an E3 condition-sweep.")
     ap.add_argument("run_dirs", nargs="+", help="run dirs for the conditions of one game")
     ap.add_argument("--prereg", default=DEFAULT_PREREG)
