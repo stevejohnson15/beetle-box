@@ -31,7 +31,7 @@ def score_run(run_dir: str, prereg_path: str = DEFAULT_PREREG) -> dict[str, Any]
     thr = prereg.get("thresholds", {})
     manifest = read_manifest(run_dir)
     cfg = from_dict(manifest["config"])
-    env = SignalingEnv(cfg.env)
+    env = SignalingEnv.from_config(cfg.env)
     channel = SymbolChannel.from_config(cfg.channel)
 
     events = list(iter_events(run_dir))

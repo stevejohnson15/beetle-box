@@ -13,7 +13,7 @@ from beetlebox.runlog import RunLogger, run_dir
 
 
 def _grid_env():
-    return SignalingEnv(EnvConfig(mode="grid", num_attributes=2, num_values=4))
+    return SignalingEnv.from_config(EnvConfig(mode="grid", num_attributes=2, num_values=4))
 
 
 # -- grounded world --------------------------------------------------------- #
@@ -32,7 +32,7 @@ def test_grounded_world_payoff_structure():
 
 def test_grounded_world_requires_grid():
     with pytest.raises(ValueError):
-        GroundedWorld(SignalingEnv(EnvConfig(mode="flat", num_referents=8)))
+        GroundedWorld(SignalingEnv.from_config(EnvConfig(mode="flat", num_referents=8)))
 
 
 # -- manager ---------------------------------------------------------------- #

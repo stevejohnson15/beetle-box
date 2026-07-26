@@ -35,7 +35,7 @@ def test_transmission_fidelity_not_applicable_without_turnover():
 
 
 def test_topsim_not_applicable_for_flat_single_symbol():
-    env = SignalingEnv(EnvConfig(mode="flat", num_referents=4))
+    env = SignalingEnv.from_config(EnvConfig(mode="flat", num_referents=4))
     ch = SymbolChannel.from_config(ChannelConfig(vocab_size=4, message_length=1))
     out = metrics.topographic_similarity([[0], [1], [2], [3]], env, ch)
     assert out == {"applicable": False}
@@ -44,7 +44,7 @@ def test_topsim_not_applicable_for_flat_single_symbol():
 def test_topsim_perfect_correlation_on_grid():
     # 2 attributes x 2 values -> 4 referents; a compositional code where each
     # symbol position encodes one attribute yields perfect topographic similarity.
-    env = SignalingEnv(EnvConfig(mode="grid", num_attributes=2, num_values=2))
+    env = SignalingEnv.from_config(EnvConfig(mode="grid", num_attributes=2, num_values=2))
     ch = SymbolChannel.from_config(ChannelConfig(vocab_size=2, message_length=2))
     mapping = [list(env.attributes_for(i)) for i in range(env.num_classes)]
     out = metrics.topographic_similarity(mapping, env, ch)

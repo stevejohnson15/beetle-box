@@ -49,7 +49,7 @@ class E5RunManager:
         self.device = torch.device(cfg.device)
         self.grounded = cfg.experiment.grounded
 
-        self.env = SignalingEnv(cfg.env)
+        self.env = SignalingEnv.from_config(cfg.env)
         self.channel = SymbolChannel.from_config(cfg.channel)
         self.num_states = self.env.num_classes
         self.world = GroundedWorld(self.env) if self.grounded else None

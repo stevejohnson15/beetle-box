@@ -1,33 +1,18 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) 2026 Beetle-Box contributors
-"""Loader for frozen pre-registrations.
+"""Loader for frozen pre-registrations -- re-exported from `frozenprereg`.
 
-Scoring must use criteria fixed *before* the run (``plan/beetle-box.md`` §3.2).
-This loads a versioned prereg YAML and refuses to proceed unless it is marked
-``frozen: true`` -- a small guard against silently scoring against a draft.
+The frozen-prereg loader (which refuses to score against a prereg not marked
+``frozen: true``) was extracted into the standalone, Apache-2.0 ``frozenprereg``
+package (https://github.com/stevejohnson15/frozenprereg); re-exported here so
+existing ``beetlebox.analysis.prereg`` imports keep working. ``DEFAULT_PREREG``
+is retained for back-compat (E1's default prereg path).
 """
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any
-
-import yaml
+from frozenprereg import PreregError, load_prereg
 
 DEFAULT_PREREG = "prereg/e1_signaling.yaml"
 
-
-def load_prereg(path: str | Path = DEFAULT_PREREG) -> dict[str, Any]:
-    """Load a frozen pre-registration document."""
-    p = Path(path)
-    if not p.exists():
-        raise FileNotFoundError(
-            f"pre-registration not found at {p!s}. Scoring requires a frozen prereg."
-        )
-    data = yaml.safe_load(p.read_text(encoding="utf-8"))
-    if not data.get("frozen", False):
-        raise ValueError(
-            f"pre-registration {p!s} is not marked 'frozen: true'; refusing to score "
-            "against an unfrozen prereg."
-        )
-    return data
+__all__ = ["DEFAULT_PREREG", "PreregError", "load_prereg"]
