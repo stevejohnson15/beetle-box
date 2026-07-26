@@ -264,6 +264,42 @@ class GrokkingConfig:
 
 
 # --------------------------------------------------------------------------- #
+# E5 (forms of life / grounding) configuration
+# --------------------------------------------------------------------------- #
+@dataclass
+class E5ExperimentConfig:
+    """The E5 protocol: the same signaling game, grounded vs. ungrounded.
+
+    ``grounded=False`` is E1 (reward = identify the referent). ``grounded=True``
+    makes words drive real consequences: the receiver chooses an action whose payoff
+    depends on the referent, with per-referent **stakes** (a resource/survival task).
+    """
+
+    name: str = "e5_forms_of_life"
+    grounded: bool = True
+    num_steps: int = 4000
+    batch_size: int = 64
+    eval_every: int = 200
+    eval_batches: int = 40
+    robustness_noise: float = 0.25  # channel-flip prob for the robustness eval
+    turnover: bool = True  # transfer-to-a-new-agent probe
+    turnover_at: float = 0.6
+
+
+@dataclass
+class E5RunConfig:
+    """Top-level E5 run configuration (reuses the E1 channel/env/agent configs)."""
+
+    seed: int = 0
+    device: str = "cpu"
+    output_dir: str = "results"
+    experiment: E5ExperimentConfig = field(default_factory=E5ExperimentConfig)
+    channel: ChannelConfig = field(default_factory=ChannelConfig)
+    env: EnvConfig = field(default_factory=EnvConfig)
+    agent: AgentConfig = field(default_factory=AgentConfig)
+
+
+# --------------------------------------------------------------------------- #
 # (de)serialization + hashing
 # --------------------------------------------------------------------------- #
 def to_dict(cfg: Any) -> dict[str, Any]:
@@ -371,6 +407,28 @@ def from_dict_e4(data: dict[str, Any]) -> E4RunConfig:
         return cls(**kwargs)
 
     return _build(E4RunConfig, dict(data))
+
+
+def from_dict_e5(data: dict[str, Any]) -> E5RunConfig:
+    """Build an :class:`E5RunConfig` from a plain dict (e.g. a Hydra DictConfig)."""
+    sub = {
+        "experiment": E5ExperimentConfig,
+        "channel": ChannelConfig,
+        "env": EnvConfig,
+        "agent": AgentConfig,
+    }
+
+    def _build(cls, values: dict[str, Any] | None):
+        values = values or {}
+        kwargs = {}
+        for f in dataclasses.fields(cls):
+            if f.name not in values:
+                continue
+            v = values[f.name]
+            kwargs[f.name] = _build(sub[f.name], dict(v)) if f.name in sub else v
+        return cls(**kwargs)
+
+    return _build(E5RunConfig, dict(data))
 
 
 def canonical_json(cfg: Any) -> str:

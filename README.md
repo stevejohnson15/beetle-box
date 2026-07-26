@@ -50,7 +50,23 @@ Fourier circuit is read out and two seeds are compared — they need not impleme
 the same algorithm. The payload is the gap between behavioral underdetermination
 and mechanistic (non-)determinacy. See [`docs/e4_quus.md`](docs/e4_quus.md).
 
-Experiments E5, E6 are scaffolded but not yet implemented.
+**E5 — forms of life / grounding (§ capstone).** The same signaling game run
+*ungrounded* (symbols are pure labels) vs. *grounded* (the receiver acts; payoffs
+carry per-referent stakes). Grounding changes the language's character: it becomes
+**selective** — encoding only the payoff-relevant distinction (selectivity gap 1.0,
+lexicon 4/16) where bare identification encodes full identity (gap 0.0, lexicon
+15/16) — evidence the form of life is load-bearing. See
+[`docs/e5_forms_of_life.md`](docs/e5_forms_of_life.md).
+
+Experiment E6 is scaffolded but not yet implemented. A consolidated, per-experiment
+bibliography is in [`docs/supplemental_reading.md`](docs/supplemental_reading.md).
+
+Run E5:
+
+```bash
+uv run python experiments/e5_forms_of_life/run.py -m experiment=e5_grounded,e5_ungrounded
+uv run python -m beetlebox.analysis.e5 results/<hash>/seed0
+```
 
 Run E4 (behavioral):
 

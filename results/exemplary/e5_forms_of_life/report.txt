@@ -1,0 +1,35 @@
+E5 report -- results/780c8f3aef9e/seed0
+  grounded=True  performance=1.000
+  lexicon_size=4/16  relevant_recoverability=1.000  irrelevant_recoverability=0.000  selectivity_gap=1.000
+  robustness_ratio=0.650
+  transfer (post/pre turnover)=1.000/1.000
+  [PASS] grounding_is_selective
+  what this does / does not license:
+    If grounding measurably changes the character of the emergent language -- here, by
+    making it selective (marking payoff-relevant distinctions, discarding the rest)
+    where bare identification encodes full identity -- that is evidence the form of
+    life is load-bearing: the surrounding activity, not the tokens alone, shapes what
+    the language means. This is the sharpest operational handle on the LLM fault line
+    (public moves vs. embedding in a form of life). It does NOT show the agents
+    "understand" anything, nor settle whether an ungrounded language could be made to
+    behave identically under a different pressure; it shows that under this grounding
+    the language's structure is different, and why. Report the change in character, not
+    a verdict on understanding. (plan §4.5)
+
+E5 report -- results/ef697debe812/seed0
+  grounded=False  performance=0.938
+  lexicon_size=15/16  relevant_recoverability=0.875  irrelevant_recoverability=0.875  selectivity_gap=0.000
+  robustness_ratio=0.733
+  transfer (post/pre turnover)=0.938/0.938
+  [PASS] encodes_full_identity
+  what this does / does not license:
+    If grounding measurably changes the character of the emergent language -- here, by
+    making it selective (marking payoff-relevant distinctions, discarding the rest)
+    where bare identification encodes full identity -- that is evidence the form of
+    life is load-bearing: the surrounding activity, not the tokens alone, shapes what
+    the language means. This is the sharpest operational handle on the LLM fault line
+    (public moves vs. embedding in a form of life). It does NOT show the agents
+    "understand" anything, nor settle whether an ungrounded language could be made to
+    behave identically under a different pressure; it shows that under this grounding
+    the language's structure is different, and why. Report the change in character, not
+    a verdict on understanding. (plan §4.5)

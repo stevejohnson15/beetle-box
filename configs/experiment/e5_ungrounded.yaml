@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+# Words drive real consequences (action -> payoff with stakes).
+name: e5_forms_of_life
+grounded: false
+num_steps: 4000
+batch_size: 64
+eval_every: 200
+eval_batches: 40
+robustness_noise: 0.25
+turnover: true
+turnover_at: 0.6

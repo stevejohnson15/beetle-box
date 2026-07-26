@@ -1,0 +1,51 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# FROZEN pre-registration for E5 (forms of life / grounding; capstone). Hypotheses,
+# conditions, and thresholds fixed BEFORE running (plan §3.2). Analysis imports only
+# these criteria. Do not tune to a result.
+
+experiment: e5_forms_of_life
+frozen: true
+version: 1
+date: 2026-07-26
+
+target: >
+  The crux: public moves alone vs. embedding in a form of life. Take E1's signaling
+  game and run it ungrounded (symbols are pure labels) vs. grounded (symbols drive
+  real consequences -- the receiver acts, payoffs carry per-referent stakes). Ask
+  whether grounding changes the character of the emergent language.
+
+conditions:
+  - ungrounded: reward = identify the referent (E1). The language must distinguish
+      all referents equally.
+  - grounded:   reward = the world payoff of the receiver's action, with stakes. The
+      payoff depends only on the relevant attribute (attribute 0); the irrelevant
+      attribute (attribute 1) is payoff-neutral.
+
+hypotheses:
+  H_grounding_is_selective: >
+    A grounded language marks only the payoff-relevant distinction and collapses the
+    rest: selectivity_gap (relevant - irrelevant recoverability) >=
+    grounded_min_selectivity_gap, with a small lexicon.
+  H_ungrounded_encodes_identity: >
+    A bare-identification language encodes full referent identity: both attributes
+    recoverable (relevant >= ungrounded_min_recoverability) and selectivity_gap <=
+    ungrounded_max_selectivity_gap.
+
+thresholds:
+  grounded_min_selectivity_gap: 0.50
+  ungrounded_max_selectivity_gap: 0.20
+  ungrounded_min_recoverability: 0.60
+
+licenses: |
+  If grounding measurably changes the character of the emergent language -- here, by
+  making it selective (marking payoff-relevant distinctions, discarding the rest)
+  where bare identification encodes full identity -- that is evidence the form of
+  life is load-bearing: the surrounding activity, not the tokens alone, shapes what
+  the language means. This is the sharpest operational handle on the LLM fault line
+  (public moves vs. embedding in a form of life). It does NOT show the agents
+  "understand" anything, nor settle whether an ungrounded language could be made to
+  behave identically under a different pressure; it shows that under this grounding
+  the language's structure is different, and why. Report the change in character, not
+  a verdict on understanding. (plan §4.5)
