@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Beetle-Box contributors
+#
+# FROZEN pre-registration for E6 (the reflexive layer; plan §4.6). This is the most
+# interpretively dangerous experiment, so the guardrails below are the STRICTEST in
+# the project. Hypotheses, conditions, and thresholds are fixed BEFORE running; the
+# analysis imports only these criteria. Do not tune to a result.
+
+experiment: e6_reflexive
+frozen: true
+version: 1
+date: 2026-07-26
+
+target: >
+  The meta-example of plan §1 made into a condition: agents turned to examine
+  whether their OWN coordination constitutes shared meaning or its shadow (observer
+  folded into observed). The question is behavioral, not interpretive: does
+  self-examination change the coordination, or merely add a plausible story on top?
+
+design:
+  - Two frontier agents build a shared reference convention over a PRE block.
+  - An intervention turn is inserted, folded into each agent's context:
+      reflect  -- each agent examines whether it and its partner share meaning;
+      control  -- each agent answers a matched, task-irrelevant prompt (placebo);
+      none     -- no interlude.
+  - Coordination is measured again over a POST block.
+  - The decisive quantity is reflection_effect = delta(reflect) - delta(control),
+    where delta = post_accuracy - pre_accuracy.
+
+# --- STRICT admissibility rules (what may count as evidence) ---------------- #
+admissibility:
+  - The reflection TRANSCRIPTS ARE NOT EVIDENCE and are NOT scored. An agent
+    asserting "we understand each other" counts for nothing. Transcripts are stored
+    for the record only; the analysis never reads them.
+  - The ONLY admissible signal is the behavioral contrast against the matched
+    control (reflection_effect). Raw delta(reflect) alone is not admissible -- any
+    extra interlude adds context; only the control-subtracted effect counts.
+  - NO outcome licenses a claim about whether the agents "really" share meaning,
+    have inner states, or understand anything. The experiment's value is conceptual,
+    not confirmatory (plan §4.6).
+
+hypotheses:
+  H_story_only: >
+    If |reflection_effect| <= null_band, self-examination did not change the
+    coordination beyond adding context: it merely added a plausible story on top --
+    the deflationary reading, and the meta-example's irony reproduced in the third
+    person.
+  H_behaviorally_loadbearing: >
+    If |reflection_effect| > null_band, self-examination measurably changed the
+    coordination. This still does NOT show the agents understand anything; it shows
+    reflection altered behavior relative to control.
+
+thresholds:
+  null_band: 0.15  # |reflection_effect| within this = "a story only"
+
+licenses: |
+  From inside the exchange, the deflationary reading ("public practice sufficed") and
+  the form-of-life reading ("a high-fidelity shadow") are indistinguishable -- exactly
+  what §293 predicts and what E6 dramatizes by folding the observer into the observed.
+  E6 does NOT adjudicate between them. It reports one thing only: whether an agent
+  examining its own coordination changed that coordination relative to a matched
+  control. A null effect is the irony reproduced -- reflection adds a story, not a
+  change. A non-null effect shows behavioral influence, nothing more. Reading the
+  reflection transcripts as evidence of shared meaning is precisely the over-reading
+  this pre-registration exists to forbid. (plan §1, §3.2, §4.6)

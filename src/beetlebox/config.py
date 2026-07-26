@@ -300,6 +300,28 @@ class E5RunConfig:
 
 
 # --------------------------------------------------------------------------- #
+# E6 (the reflexive layer) configuration -- rich (frontier) mode only
+# --------------------------------------------------------------------------- #
+@dataclass
+class E6Config:
+    """The reflexive experiment: two frontier agents coordinate, then examine it.
+
+    ``intervention`` is the manipulation: ``reflect`` (agents examine whether they
+    share meaning), ``control`` (a matched task-irrelevant interlude), or ``none``.
+    The pre-registered metric is the behavioral change in coordination (post − pre),
+    contrasted against control -- never the content of the reflection.
+    """
+
+    intervention: str = "reflect"  # reflect | control | none
+    num_referents: int = 4
+    vocab_size: int = 6
+    rounds_per_block: int = 6  # coordination rounds before and after the intervention
+    model: str | None = None  # None -> the frontier default
+    seed: int = 0
+    output_dir: str = "results"
+
+
+# --------------------------------------------------------------------------- #
 # (de)serialization + hashing
 # --------------------------------------------------------------------------- #
 def to_dict(cfg: Any) -> dict[str, Any]:
@@ -429,6 +451,12 @@ def from_dict_e5(data: dict[str, Any]) -> E5RunConfig:
         return cls(**kwargs)
 
     return _build(E5RunConfig, dict(data))
+
+
+def from_dict_e6(data: dict[str, Any]) -> E6Config:
+    """Build an :class:`E6Config` from a plain dict (flat; unknown keys ignored)."""
+    fields = {f.name for f in dataclasses.fields(E6Config)}
+    return E6Config(**{k: v for k, v in dict(data).items() if k in fields})
 
 
 def canonical_json(cfg: Any) -> str:

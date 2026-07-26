@@ -102,3 +102,27 @@ def test_default_model_is_opus(fake_anthropic):
     from beetlebox.agents.api_model import DEFAULT_MODEL
 
     assert DEFAULT_MODEL == "claude-opus-4-8"
+
+
+def test_respond_returns_text_and_tracks_usage(fake_anthropic, monkeypatch):
+    # Extend the fake to return a plain text response for respond().
+    import sys
+
+    from beetlebox.agents.api_model import ApiAgent
+
+    class _Resp:
+        def __init__(self):
+            self.content = [_FakeBlock("a reflection")]
+            self.usage = _FakeUsage()
+
+    fake = sys.modules["anthropic"]
+    orig = fake.Anthropic
+    def make(api_key=None):
+        client = orig(api_key=api_key)
+        client.messages.create = lambda **kw: _Resp()
+        return client
+    monkeypatch.setattr(fake, "Anthropic", make)
+    agent = ApiAgent(name="t", model="claude-haiku-4-5")
+    text = agent.respond("sys", "reflect please")
+    assert text == "a reflection"
+    assert agent.num_calls == 1 and agent.usage["input_tokens"] == 10
